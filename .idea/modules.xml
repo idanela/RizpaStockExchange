@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/RizpaStockExchangeFacade/RizpaStockExchangeFacade.iml" filepath="$PROJECT_DIR$/RizpaStockExchangeFacade/RizpaStockExchangeFacade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RizpaStockExchangeLogic/RizpaStockExchangeLogic.iml" filepath="$PROJECT_DIR$/RizpaStockExchangeLogic/RizpaStockExchangeLogic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RizpaStockExchangeUI/RizpaStockExchangeUI.iml" filepath="$PROJECT_DIR$/RizpaStockExchangeUI/RizpaStockExchangeUI.iml" />
+    </modules>
+  </component>
+</project>

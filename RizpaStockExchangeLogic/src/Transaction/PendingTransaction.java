@@ -5,6 +5,7 @@ import Stocks.Stock;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class PendingTransaction implements ITransaction{
 
@@ -41,6 +42,7 @@ public abstract class PendingTransaction implements ITransaction{
 
     @Override
     public String findCounterTransaction(List<ITransaction> i_Transactions) {
+
         boolean isFinished=false;
         StringBuilder msg = new StringBuilder();
         for(ITransaction transaction: i_Transactions) {

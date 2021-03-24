@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class StockExchangeEngine implements IStockEngine
 {
@@ -79,6 +80,7 @@ public class StockExchangeEngine implements IStockEngine
 
     @Override
     public void presentAllStocksTransactions() throws IOException {
+        m_AllStocks.values().forEach(stock->stock.addTransactionToStocksTransactionsList(););
         try(Writer out = new BufferedWriter(
                (new OutputStreamWriter(new FileOutputStream("allStocksTransaction.txt"))))) {
             for (Stock stock : m_AllStocks.values()) {

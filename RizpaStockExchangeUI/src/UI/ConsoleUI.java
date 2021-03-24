@@ -255,7 +255,7 @@ public class ConsoleUI implements IUI
         try(BufferedReader input = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream("allStocksTransaction.txt")));){
-            while( (line = input.readLine())!=null)
+            while( (line = input.readLine())!= null)
             {
                 System.out.println(line);
             }

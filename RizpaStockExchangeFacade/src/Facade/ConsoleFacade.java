@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 
 
-public class ConsoleFacade implements IFacade {
+public class  ConsoleFacade implements IFacade {
 
     IStockEngine m_Engine;
     public ConsoleFacade() {

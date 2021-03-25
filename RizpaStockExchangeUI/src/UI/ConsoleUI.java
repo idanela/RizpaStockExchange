@@ -172,7 +172,6 @@ public class ConsoleUI implements IUI
     @Override
     public void preformTransaction() {
         if(m_LoadSuccessfully) {
-            StringBuilder msg = new StringBuilder();
             String choice = getBuyOrSellOrder();
             System.out.println("Please enter stock name");
             String StockName = m_Scanner.next().toUpperCase();

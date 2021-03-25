@@ -24,7 +24,7 @@ public class PendingBuyTransaction extends PendingTransaction {
     }
 
     @Override
-    protected boolean checkLimit(double limit, double limitToCompareTo) {
+    protected boolean checkLimit( int limitToCompareTo) {
         return m_Limit >= limitToCompareTo;
     }
 

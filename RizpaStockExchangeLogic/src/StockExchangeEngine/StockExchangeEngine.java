@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 public class StockExchangeEngine implements IStockEngine
 {
     private Map<String,Stock> m_AllStocks;
-    private List<PendingBuyTransaction> m_PendingBuyTransactions;
-    private List<PendingSellTransaction> m_PendingSellTransactions;
+    private List<ITransaction> m_PendingBuyTransactions;
+    private List<ITransaction> m_PendingSellTransactions;
     private List<Transaction> m_Transactions;
 
 
@@ -26,12 +26,12 @@ public class StockExchangeEngine implements IStockEngine
     }
 
     @Override
-    public List<PendingSellTransaction> getPendingSellTransactions() {
+    public List<ITransaction> getPendingSellTransactions() {
         return m_PendingSellTransactions;
     }
 
     @Override
-    public List<PendingBuyTransaction> getPendingBuyTransactions() {
+    public List<ITransaction> getPendingBuyTransactions() {
         return m_PendingBuyTransactions;
     }
 
@@ -89,15 +89,6 @@ public class StockExchangeEngine implements IStockEngine
 
     }
 
-    @Override
-    public void presentAllStocksTransactions() throws IOException {
-        m_AllStocks.values().forEach(stock->stock.addTransactionToStocksTransactionsList(););
-        try(Writer out = new BufferedWriter(
-               (new OutputStreamWriter(new FileOutputStream("allStocksTransaction.txt"))))) {
-            for (Stock stock : m_AllStocks.values()) {
-                out.write(stock.getAllTransaction() + System.lineSeparator());
-            }
-        }
-    }
+
 
 }

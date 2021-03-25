@@ -3,7 +3,9 @@ package Transaction;
 import Stocks.Stock;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -40,35 +42,29 @@ public abstract class PendingTransaction implements ITransaction{
         return m_Stock.getStockName();
     }
 
-    @Override
-    public boolean findCounterTransaction(List<ITransaction> i_Transactions) {
+    protected abstract boolean checkLimit(int limitToCompareTo);
+    protected abstract boolean checkTypeToCompare(ITransaction transaction);
 
-        boolean isFinished = false;
-        for(ITransaction transaction: i_Transactions) {
-            if(checkTypeToCompare(transaction)) {
+    public List<Transaction> findCounterTransaction(List<ITransaction> transactionsToScan) {
+        List<Transaction> transactionsMade = new LinkedList<>();
+        for(ITransaction transaction: transactionsToScan) {
                 if(m_Stock.equals(transaction.getStock())) {
-                    if(checkLimit(m_Limit,transaction.getLimit())) {
-                        isFinished = preformTransaction(i_Transactions, transaction);
-                    }
-
-                    if(isFinished)
+                    if(checkLimit(transaction.getLimit())) {
+                    if (preformTransaction(transactionsToScan, transaction ,transactionsMade))
                         break;
-                }
-
+                    }
             }
         }
 
+        return transactionsMade;
+
+}
 
 
-        return isFinished;
-    }
 
-    protected abstract boolean checkLimit(double limit, double limitToCompareTo);
-    protected abstract boolean checkTypeToCompare(ITransaction transaction);
-
-    private boolean preformTransaction(List<ITransaction> i_transactions, ITransaction transaction)
+    private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction transaction, List<Transaction> transactionsMade)
     {
-        boolean isFinishedBuy = false;
+        boolean isFinished = false;
         int numOfTransactionStocks = 0;
         Transaction newTransaction;
         if(this.m_NumOfStocks >= transaction.getNumOfStocks())
@@ -79,22 +75,18 @@ public abstract class PendingTransaction implements ITransaction{
         }
         else
         {
-            newTransaction= new Transaction(transaction.getNumOfStocks(),transaction.getLimit());
+            newTransaction = new Transaction(transaction.getNumOfStocks(),transaction.getLimit());
         }
-
-        addToTransactionList(i_transactions);
+        transactionsMade.add(0,newTransaction);
         this.m_Stock.addTransactionToStocksTransactionsList(newTransaction);
 
         if(numOfTransactionStocks == 0)
         {
-            isFinishedBuy = true;
+            isFinished = true;
         }
 
-        return isFinishedBuy;
+        return isFinished;
     }
 
-    private void addToTransactionList(List<ITransaction> i_transactions)
-    {
-        i_transactions.add(0,this);
-    }
+
 }

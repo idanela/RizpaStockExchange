@@ -17,8 +17,8 @@ public interface IStockEngine {
     public boolean getXmlContent(String path,Boolean hasSameCompany,Boolean hasSameSymbol);
     //public loadStocks();
     List<Transaction> getTransactionlist();
-    public List<PendingSellTransaction> getPendingSellTransactions();
-    public List<PendingBuyTransaction> getPendingBuyTransactions();
+    public List<ITransaction> getPendingSellTransactions();
+    public List<ITransaction> getPendingBuyTransactions();
     public boolean findTransaction(String stockName, double limit, int amountForTransaction);
     public void addPendingSell(Stock stock);
     public void addPendingPurchase(Stock stock);

@@ -3,12 +3,10 @@ package Facade;
 import StockExchangeEngine.IStockEngine;
 import StockExchangeEngine.StockExchangeEngine;
 import Stocks.Stock;
-import Transaction.PendingBuyTransaction;
-import Transaction.PendingSellTransaction;
-import Transaction.PendingTransaction;
+import Transaction.*;
 
-import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,14 +31,14 @@ public class  ConsoleFacade implements IFacade {
     public String sellStocks(String stockName, int limit, int amountForTransaction) {
         Stock stock = m_Engine.getStocks().get(stockName);
         PendingTransaction sellTransaction = new PendingSellTransaction(stock,limit,amountForTransaction);
-        return sellTransaction.findCounterTransaction(m_Engine.getPendingBuyTransactions());
+       // return m_Engine.findAndPreformCounterTransaction(sellTransaction, m_Engine.getPendingBuyTransactions());
     }
 
     @Override
-    public boolean buyStocks(String stockName, int limit, int amountForTransaction) {
+    public List<Transaction> buyStocks(String stockName, int limit, int amountForTransaction) {
         Stock stock = m_Engine.getStocks().get(stockName);
         PendingTransaction buyTransaction = new PendingBuyTransaction(stock, limit, amountForTransaction);
-        return buyTransaction.findCounterTransaction(m_Engine.getTransactionlist());
+        return buyTransaction.findCounterTransaction(m_Engine.getPendingSellTransactions());
     }
 
     @Override

@@ -5,9 +5,8 @@ import Stocks.Stock;
 import java.util.List;
 
 public interface ITransaction {
-    boolean findCounterTransaction(List<ITransaction> i_Transactions);
+    Stock getStock();
     String getStockName();
     int getNumOfStocks();
     int getLimit();
-    Stock getStock();
 }

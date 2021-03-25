@@ -3,9 +3,11 @@ package Facade;
 import StockExchangeEngine.IStockEngine;
 import StockExchangeEngine.StockExchangeEngine;
 import Stocks.Stock;
+import Transaction.PendingBuyTransaction;
 import Transaction.PendingSellTransaction;
 import Transaction.PendingTransaction;
 
+import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
 import java.util.Map;
 
@@ -23,22 +25,22 @@ public class  ConsoleFacade implements IFacade {
     }
 
     @Override
-    public boolean loadStocksData(StringBuilder msg, String path) {
-        return m_Engine.getXmlContent(msg, path);
+    public boolean loadStocksData(String path, Boolean hasSameCompany, Boolean hasSameSymbol) {
+        return m_Engine.getXmlContent(path,hasSameCompany,hasSameSymbol);
     }
 
     @Override
-    public String sellStocks(String stockName, double limit, int amountForTransaction) {
+    public String sellStocks(String stockName, int limit, int amountForTransaction) {
         Stock stock = m_Engine.getStocks().get(stockName);
         PendingTransaction sellTransaction = new PendingSellTransaction(stock,limit,amountForTransaction);
-        return sellTransaction.findCounterTransaction(m_Engine.getTransactionlist());
+        return sellTransaction.findCounterTransaction(m_Engine.getPendingBuyTransactions());
     }
 
     @Override
-    public String buyStocks(String stockName, double limit, int amountForTransaction) {
+    public boolean buyStocks(String stockName, int limit, int amountForTransaction) {
         Stock stock = m_Engine.getStocks().get(stockName);
-        PendingTransaction sellTransaction = new PendingSellTransaction(stock,limit,amountForTransaction);
-        return sellTransaction.findCounterTransaction(m_Engine.getTransactionlist());
+        PendingTransaction buyTransaction = new PendingBuyTransaction(stock, limit, amountForTransaction);
+        return buyTransaction.findCounterTransaction(m_Engine.getTransactionlist());
     }
 
     @Override

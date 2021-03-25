@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 public abstract class PendingTransaction implements ITransaction{
 
     Stock m_Stock;
-    double m_Limit;
+    int m_Limit;
     int m_NumOfStocks;
     String m_DateOfTransaction;
 
@@ -19,7 +19,7 @@ public abstract class PendingTransaction implements ITransaction{
         return m_Stock;
     }
 
-    public PendingTransaction(Stock m_Stock, double m_Limit, int numOfStocks) {
+    public PendingTransaction(Stock m_Stock, int m_Limit, int numOfStocks) {
         this.m_Stock = m_Stock;
         this.m_Limit = m_Limit;
         this.m_NumOfStocks = numOfStocks;
@@ -31,7 +31,7 @@ public abstract class PendingTransaction implements ITransaction{
     }
 
     @Override
-    public double getLimit() {
+    public int getLimit() {
         return m_Limit;
     }
 
@@ -41,33 +41,32 @@ public abstract class PendingTransaction implements ITransaction{
     }
 
     @Override
-    public String findCounterTransaction(List<ITransaction> i_Transactions) {
+    public boolean findCounterTransaction(List<ITransaction> i_Transactions) {
 
-        boolean isFinished=false;
-        StringBuilder msg = new StringBuilder();
+        boolean isFinished = false;
         for(ITransaction transaction: i_Transactions) {
             if(checkTypeToCompare(transaction)) {
                 if(m_Stock.equals(transaction.getStock())) {
                     if(checkLimit(m_Limit,transaction.getLimit())) {
-                        isFinished = preformTransaction(i_Transactions, transaction,msg);
-                        if(isFinished) {
-                            msg.append("Transaction completed fully");
-                            break;
-                        }
+                        isFinished = preformTransaction(i_Transactions, transaction);
                     }
+
+                    if(isFinished)
+                        break;
                 }
+
             }
         }
-        if(!isFinished)
-            msg.append("Transaction completed Partially");
 
-        return msg.toString();
+
+
+        return isFinished;
     }
 
     protected abstract boolean checkLimit(double limit, double limitToCompareTo);
     protected abstract boolean checkTypeToCompare(ITransaction transaction);
 
-    private boolean preformTransaction(List<ITransaction> i_transactions, ITransaction transaction,StringBuilder msg)
+    private boolean preformTransaction(List<ITransaction> i_transactions, ITransaction transaction)
     {
         boolean isFinishedBuy = false;
         int numOfTransactionStocks = 0;
@@ -76,7 +75,6 @@ public abstract class PendingTransaction implements ITransaction{
         {
             numOfTransactionStocks = m_NumOfStocks - transaction.getNumOfStocks();
             newTransaction = new Transaction(numOfTransactionStocks,transaction.getLimit());
-            msg.append(transaction.toString());
             this.m_NumOfStocks = numOfTransactionStocks;
         }
         else
@@ -89,7 +87,7 @@ public abstract class PendingTransaction implements ITransaction{
 
         if(numOfTransactionStocks == 0)
         {
-            isFinishedBuy =!isFinishedBuy;
+            isFinishedBuy = true;
         }
 
         return isFinishedBuy;

@@ -4,7 +4,7 @@ import Stocks.Stock;
 
 public class PendingSellTransaction extends PendingTransaction {
 
-    public PendingSellTransaction(Stock stock, double limit, int numOfStocks) {
+    public PendingSellTransaction(Stock stock, int limit, int numOfStocks) {
         super(stock,limit,numOfStocks);
     }
 

@@ -1,21 +1,39 @@
 package Transaction;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 public class Transaction
 {
-    String m_DateOfTransaction;
-    int m_AmountOfStocks;
-    double m_PriceOfStockSelledFor;
-    double m_TransactionWorth;
+    private String m_DateOfTransaction;
+    private int m_AmountOfStocks;
+    private int m_PriceOfStockSelledFor;
+    private int m_TransactionWorth;
 
-    public Transaction(int m_AmountOfStocks, double m_PriceOfStock) {
+    public Transaction(int m_AmountOfStocks, int m_PriceOfStock) {
         this.m_DateOfTransaction = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         this.m_AmountOfStocks = m_AmountOfStocks;
         this.m_PriceOfStockSelledFor = m_PriceOfStock;
         this.m_TransactionWorth = m_AmountOfStocks* m_PriceOfStock;
     }
+
+
+    public String getDateOfTransaction() {
+        return m_DateOfTransaction;
+    }
+
+    public int getAmountOfStocks() {
+        return m_AmountOfStocks;
+    }
+
+    public int getPriceOfStockSelledFor() {
+        return m_PriceOfStockSelledFor;
+    }
+
+    public int getTransactionWorth() {
+        return m_TransactionWorth;
+    }
+
 
     @Override
     public String toString() {
@@ -25,6 +43,10 @@ public class Transaction
                 ", m_PriceOfStock:" + m_PriceOfStockSelledFor +
                 ", m_TransactionWorth:" + m_TransactionWorth +
                 "}\r\n";
+    }
+
+    public static void sortTransactions(List<Transaction> transactions){
+        Collections.sort(transactions,new SortByDate());
     }
 
 }

@@ -8,9 +8,9 @@ import java.util.Map;
 public interface IFacade
 {
     public boolean isStockExists(String stockName);
-    public boolean loadStocksData(StringBuilder msg,String path);
-    public String sellStocks(String stockName, double limit, int amountForTransaction);
-    public String buyStocks(String stockName, double limit, int amountForTransaction);
+    public boolean loadStocksData (String path, Boolean hasSameCompany, Boolean hasSameSymbol);
+    public String sellStocks(String stockName, int limit, int amountForTransaction);
+    public boolean buyStocks(String stockName, int limit, int amountForTransaction);
 
 
 

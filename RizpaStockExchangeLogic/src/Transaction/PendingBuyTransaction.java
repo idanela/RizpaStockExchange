@@ -14,7 +14,7 @@ public class PendingBuyTransaction extends PendingTransaction {
     String m_DateOfTransaction;
 
 
-    public PendingBuyTransaction(Stock stock, double limit, int numOfStocks) {
+    public PendingBuyTransaction(Stock stock, int limit, int numOfStocks) {
         super(stock,limit,numOfStocks);
     }
 

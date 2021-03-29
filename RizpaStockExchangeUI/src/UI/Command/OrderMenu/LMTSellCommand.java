@@ -1,5 +1,4 @@
 package UI.Command.OrderMenu;
-
 import Transaction.LMTSellTransaction;
 import UI.Command.ICommand;
 import UI.IUI;

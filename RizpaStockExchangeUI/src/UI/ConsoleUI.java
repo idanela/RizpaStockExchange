@@ -185,7 +185,7 @@ public class ConsoleUI implements IUI
                 return;
             }
             int amountForTransaction = getNumberOfStocksToPreformTransaction();
-            preformTransactionAccordingToUserChoice(choice, StockName, amountForTransaction);
+            preformTransactionAccordingToUserChoice(choice.toUpperCase(), StockName, amountForTransaction);
         }
         else
         {
@@ -197,7 +197,7 @@ public class ConsoleUI implements IUI
 
         int limit = 0;
         Stock stock = m_Facade.getStock(stockName);
-        if(choice == "B")
+        if(choice.equals("B"))
         {
             m_BuyOrderMenu.Run(true);
             if(!(m_TransactionToUse instanceof MKTTransaction))
@@ -208,9 +208,9 @@ public class ConsoleUI implements IUI
         else
         {
             m_SellOrderMenu.Run(true);
-            m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
             if(!(m_TransactionToUse instanceof MKTTransaction))
                 limit = getLimit();
+            m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
             sellStocks(m_TransactionToUse);
         }
     }
@@ -235,12 +235,12 @@ public class ConsoleUI implements IUI
         return amount;
     }
 
-    private void buyStocks(ITransaction transaction)
-    {
+    private void buyStocks(ITransaction transaction) {
+        int amount = m_TransactionToUse.getNumOfStocks();
         if(m_Facade.isStockExists(transaction.getStock().getStockName()))
         {
             List<TransactionMade> transactionsMade = m_Facade.buyStocks(m_TransactionToUse);
-            PrintUtils.printDetailsAboutTransactionsMade(transactionsMade,transaction.getNumOfStocks());
+            PrintUtils.printDetailsAboutTransactionsMade(transactionsMade,amount);
         }
         else
         {
@@ -248,21 +248,21 @@ public class ConsoleUI implements IUI
         }
     }
 
+    private void sellStocks(ITransaction transaction) {
+        int amount = m_TransactionToUse.getNumOfStocks();
+        if(m_Facade.isStockExists(transaction.getStock().getStockName())) {
+            List<TransactionMade> transactions = m_Facade.sellStocks(m_TransactionToUse);
+            PrintUtils.printDetailsAboutTransactionsMade(transactions, amount);
+        }
+        else
+        {
+            stockNotExists(transaction.getStock().getStockName());
+        }
+    }
 
     private void stockNotExists(String stockName)
     {
         System.out.println("There is no stock called " + stockName + "in the system");
-    }
-
-    private void sellStocks(ITransaction transaction) {
-        if(m_Facade.isStockExists(transaction.getStock().getStockName())) {
-            List<TransactionMade> transactions = m_Facade.sellStocks(m_TransactionToUse);
-            PrintUtils.printDetailsAboutTransactionsMade(transactions, m_TransactionToUse.getNumOfStocks());
-        }
-        else
-        {
-            stockNotExists(transaction.getStock().getStockName());
-        }
     }
 
     private int getLimit()

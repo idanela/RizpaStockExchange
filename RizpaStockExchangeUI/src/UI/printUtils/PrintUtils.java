@@ -39,6 +39,7 @@ public class PrintUtils {
 
     private static void printTransaction(ITransaction transaction)
     {
+        System.out.println("Symbol: "+transaction.getStock().getStockName());
         System.out.println("Date: "+transaction.getDateOfTransaction());
         System.out.println("Amount: "+transaction.getNumOfStocks());
         System.out.println("Price: "+transaction.getPriceOfStock());

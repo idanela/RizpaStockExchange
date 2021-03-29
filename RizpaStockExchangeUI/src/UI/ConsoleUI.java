@@ -2,86 +2,95 @@ package UI;
 
 import Facade.ConsoleFacade;
 import Facade.IFacade;
+import StockExchangeEngine.IStockEngine;
 import Stocks.Stock;
+import Transaction.*;
+import UI.Command.MainMenu.*;
+import UI.Command.OrderMenu.LMTBuyCommand;
+import UI.Command.OrderMenu.LMTSellCommand;
+import UI.Command.OrderMenu.MKTCommand;
+import UI.Menu.Menu;
+import UI.menuItem.MenuItem;
 import UI.printUtils.PrintUtils;
 
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class ConsoleUI implements IUI
 {
-    public ConsoleUI() {
-        this.m_Facade = new ConsoleFacade();
-        this.m_Scanner = new Scanner(System.in);
-        m_LoadSuccessfully = false;
-    }
 
     private IFacade m_Facade;
     private Scanner m_Scanner;
     private boolean m_LoadSuccessfully;
-    @Override
-    public void showMenu()
-    {
-        String menu = String.format("Pick one of the options below:"  +
-                System.lineSeparator() +
-                "1.Load Stocks Details" +
-                System.lineSeparator() +
-                "2.Present stocks that are defined in the system" +
-                System.lineSeparator() +
-                "3.Present details on a specific stock" +
-                System.lineSeparator() +
-                "4.Preform Transaction" +
-                System.lineSeparator() +
-                "5.Present command list for execution" +
-                System.lineSeparator() +
-                "6.Exit"+System.lineSeparator());
-        System.out.println(menu);
-        getChoice();
+    private Menu m_MainMenu;
+    private Menu m_BuyOrderMenu;
+    private Menu m_SellOrderMenu;
+    AllTransactionsKind m_TransactionToUse;
+
+    public ConsoleUI() {
+        this.m_Facade = new ConsoleFacade();
+        this.m_Scanner = new Scanner(System.in);
+        this.m_LoadSuccessfully = false;
+        this.m_BuyOrderMenu = new Menu(initializeBuyOrderMenu());
+        this.m_SellOrderMenu = new Menu(initializeSellOrderMenu());
+        this.m_MainMenu = new Menu(initializeMainMenu());
+        this.m_TransactionToUse = null;
     }
 
     @Override
-    public void getChoice()
-    {
-        int choice = 0;
-        boolean gotChoice = false;
-        while(!gotChoice)
-        {
-            System.out.println("Please enter a number from 1-6:");
-            showMenu();
-            try
-            {
-                choice=m_Scanner.nextInt();
-                if(choice >=1 && choice<=6)
-                {
-                    gotChoice = true;
-                }
-                else
-                {
-                    System.out.println("The Number you've entered is not between 1-6.");
-                }
-            }
-            catch (NumberFormatException e) {
-                System.out.println("You've Entered an input which is not an integer.");
-            }
-        }
-        preformAction(choice);
+    public Menu getMainMenu() {
+        return m_MainMenu;
+    }
+
+    public ITransaction getTransactionToUse() {
+        return m_TransactionToUse;
     }
 
     @Override
-    public boolean loadStocksData()
+    public void setTransactionToUse(AllTransactionsKind transaction) {
+            this.m_TransactionToUse = transaction;
+    }
+
+    private List<MenuItem> initializeMainMenu()
     {
-        Boolean hasSameSymbol=false;
-        Boolean hasSameCompany=false;
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("Load system file.",new LoadSystemDetailsCommand(this)));
+        menuItems.add(new MenuItem("Present all stocks in the system.",new PresentAllStocksInSystemCommand(this)));
+        menuItems.add(new MenuItem("Present a single stock details.",new PresentStockCommand(this)));
+        menuItems.add(new MenuItem("Preform Transaction.",new PreformTransactionCommand(this)));
+        menuItems.add(new MenuItem("Present Command list for execution.",new PresentCommandListForExecutionCommand(this)));
+        menuItems.add(new MenuItem("Exit",new ExitCommand(this)));
+
+        return menuItems;
+    }
+
+    private List<MenuItem> initializeBuyOrderMenu()
+    {
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("LMT",new LMTBuyCommand(this)));
+        menuItems.add(new MenuItem("MKT",new MKTCommand(this)));
+
+        return menuItems;
+    }
+
+    private List<MenuItem> initializeSellOrderMenu() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("LMT",new LMTSellCommand(this)));
+        menuItems.add(new MenuItem("MKT",new MKTCommand(this)));
+
+        return menuItems;
+    }
+
+    @Override
+    public void loadStocksData()
+    {
+        Boolean hasSameSymbol = false;
+        Boolean hasSameCompany = false;
         boolean loadedSuccessfully = false;
         StringBuilder msg = new StringBuilder();
         System.out.println("please enter file's full path:");
         String path = m_Scanner.next();
-            if(fileIsValid(path))
-            {
-
-            }
         if(fileIsValid(path))
         {
             loadedSuccessfully = m_Facade.loadStocksData(path,hasSameCompany,hasSameSymbol);
@@ -91,9 +100,6 @@ public class ConsoleUI implements IUI
         {
             printErrorsAboutFile(path);
         }
-
-        return loadedSuccessfully;
-
     }
 
     private void printErrorsAboutFile(String path) {
@@ -106,7 +112,7 @@ public class ConsoleUI implements IUI
         {
             if (path.endsWith("xml"))
             {
-                msg.append("File is not an xml file"+System.lineSeparator());
+                msg.append("File is not an xml file");
             }
         }
 
@@ -118,13 +124,14 @@ public class ConsoleUI implements IUI
         StringBuilder msg = new StringBuilder();
         if(loadedSuccessfully)
         {
+            m_LoadSuccessfully = true;
             msg.append("File was Loaded Successfully.");
         }
         else
         {
             if(hasSameCompany)
             {
-                msg.append("The file contains two different stocks belong to the same company. ")
+                msg.append("The file contains two different stocks belong to the same company. ");
             }
             if(hasSameSymbol)
             {
@@ -145,9 +152,7 @@ public class ConsoleUI implements IUI
     public void presentStocks() {
         if(m_LoadSuccessfully) {
             Map<String, Stock> stocksNameToStockDetails = m_Facade.getStocks();
-            for (Stock stock : stocksNameToStockDetails.values()) {
-                PrintUtils.printStock(stock);
-            }
+            PrintUtils.printAllStocks(stocksNameToStockDetails);
         }
         else
         {
@@ -179,9 +184,8 @@ public class ConsoleUI implements IUI
                 System.out.println("There is no stock by that name.");
                 return;
             }
-            int limit = getLimit();
             int amountForTransaction = getNumberOfStocksToPreformTransaction();
-            preformTransactionAccordingToUserChoice(choice, StockName, limit, amountForTransaction);
+            preformTransactionAccordingToUserChoice(choice, StockName, amountForTransaction);
         }
         else
         {
@@ -189,15 +193,25 @@ public class ConsoleUI implements IUI
         }
     }
 
-    private void preformTransactionAccordingToUserChoice(String choice, String stockName, int limit, int amountForTransaction) {
+    private void preformTransactionAccordingToUserChoice(String choice, String stockName, int amountForTransaction) {
 
+        int limit = 0;
+        Stock stock = m_Facade.getStock(stockName);
         if(choice == "B")
         {
-            buyStocks(stockName, limit,amountForTransaction);
+            m_BuyOrderMenu.Run(true);
+            if(!(m_TransactionToUse instanceof MKTTransaction))
+                limit = getLimit();
+                m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
+            buyStocks(m_TransactionToUse);
         }
         else
         {
-            sellStocks(stockName,limit,amountForTransaction);
+            m_SellOrderMenu.Run(true);
+            m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
+            if(!(m_TransactionToUse instanceof MKTTransaction))
+                limit = getLimit();
+            sellStocks(m_TransactionToUse);
         }
     }
 
@@ -221,32 +235,33 @@ public class ConsoleUI implements IUI
         return amount;
     }
 
-    private void buyStocks(String stockName, int limit, int amountForTransaction)
+    private void buyStocks(ITransaction transaction)
     {
-      boolean isTransactionSuccessful;
-        if(m_Facade.isStockExists(stockName))
+        if(m_Facade.isStockExists(transaction.getStock().getStockName()))
         {
-            isTransactionSuccessful = m_Facade.buyStocks(stockName,limit,amountForTransaction);
+            List<TransactionMade> transactionsMade = m_Facade.buyStocks(m_TransactionToUse);
+            PrintUtils.printDetailsAboutTransactionsMade(transactionsMade,transaction.getNumOfStocks());
         }
         else
         {
-            stockNotExists(stockName);
+            stockNotExists(transaction.getStock().getStockName());
         }
     }
+
+
     private void stockNotExists(String stockName)
     {
         System.out.println("There is no stock called " + stockName + "in the system");
     }
 
-    private void sellStocks(String stockName, int limit, int amountForTransaction) {
-        if(m_Facade.isStockExists(stockName))
-        {
-          String msg =  m_Facade.sellStocks(stockName,limit,amountForTransaction);
-            System.out.println(msg);
+    private void sellStocks(ITransaction transaction) {
+        if(m_Facade.isStockExists(transaction.getStock().getStockName())) {
+            List<TransactionMade> transactions = m_Facade.sellStocks(m_TransactionToUse);
+            PrintUtils.printDetailsAboutTransactionsMade(transactions, m_TransactionToUse.getNumOfStocks());
         }
         else
         {
-            stockNotExists(stockName);
+            stockNotExists(transaction.getStock().getStockName());
         }
     }
 
@@ -259,7 +274,7 @@ public class ConsoleUI implements IUI
             System.out.println("Please enter the limit(a positive number) for the transaction");
             try {
                 limit = m_Scanner.nextInt();
-                if(limit>0)
+                if(limit > 0)
                 {
                     isValidLimit = true;
                 }
@@ -274,6 +289,7 @@ public class ConsoleUI implements IUI
 
         return limit;
     }
+
     private String getBuyOrSellOrder()
     {
         String choice = null;
@@ -286,69 +302,21 @@ public class ConsoleUI implements IUI
             {
                 System.out.println("You have Entered Invalid Choice.");
             }
+            else
+            {
+                isValid = true;
+            }
         }
         return choice;
     }
 
     @Override
-    public void presentCommandListForExecution() throws IOException{
-        m_Facade.loadCommandListForExecution();
-        String line;
-        try(BufferedReader input = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream("allStocksTransaction.txt")));){
-            while( (line = input.readLine())!= null)
-            {
-                System.out.println(line);
-            }
-        }
-
+    public void presentCommandListForExecution() {
+        IStockEngine engine = m_Facade.getEngine();
+        PrintUtils.printAllTransactionInSystem(engine);
     }
 
-
-
-
-
-
-    @Override
-    public void exit() {
-        System.out.println("Thank you for using Rizpa stock Exchange System. Come back soon :)");
-    }
-
-    boolean preformAction(int choice)
-    {
-        boolean exit = false;
-        switch (choice)
-        {
-            case 1:
-                if(loadStocksData())
-                {
-                    m_LoadSuccessfully = true;
-                };
-                break;
-            case 2:
-                    presentStocks();
-                break;
-            case 3:
-                getStockDetails();
-                break;
-            case 4:
-                preformTransaction();
-                break;
-            case 5:
-
-                break;
-            case 6:
-                exit = true;
-                exit();
-                break;
-
-        }
-
-        return exit;
-    }
-
-    private void getStockDetails()
+    public void getStockDetails()
     {
         if(m_LoadSuccessfully)
         {
@@ -361,5 +329,10 @@ public class ConsoleUI implements IUI
             fileWasNotUploaded();
         }
 
+    }
+
+    @Override
+    public void exit() {
+        System.out.println("Thank you for using Rizpa stock exchange system");
     }
 }

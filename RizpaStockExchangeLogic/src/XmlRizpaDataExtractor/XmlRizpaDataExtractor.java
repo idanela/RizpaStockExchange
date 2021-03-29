@@ -28,11 +28,7 @@ public class XmlRizpaDataExtractor {
            e.printStackTrace();
        }
 
-       if(checkIfContentIsValid(stocksDescriptor))
-       {
-           msg.append("File loaded successfully" + System.lineSeparator());
-       }
-       else
+       if(!checkIfContentIsValid(stocksDescriptor))
        {
            stocksDescriptor = null;
        }

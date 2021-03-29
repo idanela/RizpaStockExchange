@@ -5,7 +5,6 @@ import StockExchangeEngine.StockExchangeEngine;
 import Stocks.Stock;
 import Transaction.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,17 +27,17 @@ public class  ConsoleFacade implements IFacade {
     }
 
     @Override
-    public String sellStocks(String stockName, int limit, int amountForTransaction) {
-        Stock stock = m_Engine.getStocks().get(stockName);
-        PendingTransaction sellTransaction = new PendingSellTransaction(stock,limit,amountForTransaction);
-       // return m_Engine.findAndPreformCounterTransaction(sellTransaction, m_Engine.getPendingBuyTransactions());
+    public List<TransactionMade> sellStocks(ITransaction transaction) {
+        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingBuyTransactions(), m_Engine.getPendingSellTransactions());
+        m_Engine.addTransactionsMade(transactionsMade);
+        return transactionsMade;
     }
 
     @Override
-    public List<Transaction> buyStocks(String stockName, int limit, int amountForTransaction) {
-        Stock stock = m_Engine.getStocks().get(stockName);
-        PendingTransaction buyTransaction = new PendingBuyTransaction(stock, limit, amountForTransaction);
-        return buyTransaction.findCounterTransaction(m_Engine.getPendingSellTransactions());
+    public List<TransactionMade> buyStocks(ITransaction transaction) {
+        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingSellTransactions(), m_Engine.getPendingBuyTransactions());
+        m_Engine.addTransactionsMade(transactionsMade);
+        return transactionsMade;
     }
 
     @Override
@@ -52,17 +51,10 @@ public class  ConsoleFacade implements IFacade {
     }
 
     @Override
-    public void preformTransaction() {
+    public IStockEngine getEngine() {return m_Engine;}
 
-    }
-
-    @Override
-    public void loadCommandListForExecution()throws IOException {
-       m_Engine.presentAllStocksTransactions();
-    }
-
-    @Override
-    public void exit() {
-
-    }
+    //@Override
+    //public void loadCommandListForExecution() {
+     //  m_Engine.presentAllStocksTransactions();
+  //  }
 }

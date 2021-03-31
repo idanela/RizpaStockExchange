@@ -15,7 +15,7 @@ public class TransactionMade implements ITransaction
 
     public TransactionMade(Stock stock,int amountOfStocks, int priceOfStock) {
         this.m_stock =stock;
-        this.m_DateOfTransaction = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.m_AmountOfStocks = amountOfStocks;
         this.m_PriceOfStockSelledFor = priceOfStock;
         this.m_TransactionWorth = amountOfStocks * priceOfStock;
@@ -23,7 +23,7 @@ public class TransactionMade implements ITransaction
 
     @Override
     public void setNumOfStocks(int number) {
-        m_AmountOfStocks=number;
+        m_AmountOfStocks = number;
     }
 
     @Override

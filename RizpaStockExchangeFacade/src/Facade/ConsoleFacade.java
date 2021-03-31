@@ -7,6 +7,7 @@ import Transaction.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class  ConsoleFacade implements IFacade {
@@ -22,7 +23,7 @@ public class  ConsoleFacade implements IFacade {
     }
 
     @Override
-    public boolean loadStocksData(String path, Boolean hasSameCompany, Boolean hasSameSymbol) {
+    public boolean loadStocksData(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol) {
         return m_Engine.getXmlContent(path,hasSameCompany,hasSameSymbol);
     }
 
@@ -53,8 +54,9 @@ public class  ConsoleFacade implements IFacade {
     @Override
     public IStockEngine getEngine() {return m_Engine;}
 
-    //@Override
-    //public void loadCommandListForExecution() {
-     //  m_Engine.presentAllStocksTransactions();
-  //  }
+
+    @Override
+    public void setEngine(IStockEngine engine) {
+        m_Engine = engine;
+    }
 }

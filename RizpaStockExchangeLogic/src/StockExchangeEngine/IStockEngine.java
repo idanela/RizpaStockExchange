@@ -4,14 +4,15 @@ import Stocks.Stock;
 import Transaction.ITransaction;
 import Transaction.TransactionMade;
 
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public interface IStockEngine {
+public interface IStockEngine extends Serializable {
 
     public Map<String,Stock> getStocks();
-    public boolean getXmlContent(String path,Boolean hasSameCompany,Boolean hasSameSymbol);
+    public boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol);
     //public loadStocks();
     public List<ITransaction> getTransactionList();
     public List<ITransaction> getPendingSellTransactions();

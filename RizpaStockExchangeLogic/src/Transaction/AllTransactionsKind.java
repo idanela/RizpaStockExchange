@@ -3,7 +3,9 @@ package Transaction;
 import Stocks.Stock;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AllTransactionsKind  implements ITransaction{
@@ -17,7 +19,7 @@ public abstract class AllTransactionsKind  implements ITransaction{
         this.m_Stock = stock;
         this.m_Limit = limit;
         this.m_NumOfStocks = numOfStocks;
-        this.m_DateOfTransaction = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
     }
 
     public AllTransactionsKind() {
@@ -60,5 +62,19 @@ public abstract class AllTransactionsKind  implements ITransaction{
         return m_Limit*m_NumOfStocks;
     }
 
-    // public abstract List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan,List<ITransaction> toAdd);
+    public abstract boolean doTransaction(List<TransactionMade> transactionsMade, List<ITransaction> transactionsToScan, List<ITransaction> toAdd, List<ITransaction> toRemove);
+
+    @Override
+    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
+        List<TransactionMade> transactionsMade = new LinkedList<>();
+        List<ITransaction> toRemove = new ArrayList<>();
+        boolean isFinished = doTransaction(transactionsMade,transactionsToScan,toAdd,toRemove);
+        transactionsToScan.removeAll(toRemove);
+        if(!isFinished)
+        {
+            toAdd.add(0,this);
+        }
+
+        return transactionsMade;
+    }
 }

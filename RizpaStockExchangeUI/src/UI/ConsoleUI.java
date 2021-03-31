@@ -13,9 +13,11 @@ import UI.Menu.Menu;
 import UI.menuItem.MenuItem;
 import UI.printUtils.PrintUtils;
 
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConsoleUI implements IUI
 {
@@ -26,7 +28,10 @@ public class ConsoleUI implements IUI
     private Menu m_MainMenu;
     private Menu m_BuyOrderMenu;
     private Menu m_SellOrderMenu;
-    AllTransactionsKind m_TransactionToUse;
+    private AllTransactionsKind m_TransactionToUse;
+    private static final String FILE_TEXT_PATH_NAME = "EnginePathSaver.txt";
+    private static final String FILE_OBJECT_NAME = "EngineData.dat";
+
 
     public ConsoleUI() {
         this.m_Facade = new ConsoleFacade();
@@ -55,6 +60,7 @@ public class ConsoleUI implements IUI
     private List<MenuItem> initializeMainMenu()
     {
         List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("Load system previous status.",new LoadPreviousSystemStatus(this)));
         menuItems.add(new MenuItem("Load system file.",new LoadSystemDetailsCommand(this)));
         menuItems.add(new MenuItem("Present all stocks in the system.",new PresentAllStocksInSystemCommand(this)));
         menuItems.add(new MenuItem("Present a single stock details.",new PresentStockCommand(this)));
@@ -85,8 +91,8 @@ public class ConsoleUI implements IUI
     @Override
     public void loadStocksData()
     {
-        Boolean hasSameSymbol = false;
-        Boolean hasSameCompany = false;
+        AtomicBoolean hasSameSymbol = new AtomicBoolean(false);
+        AtomicBoolean hasSameCompany = new AtomicBoolean(false);
         boolean loadedSuccessfully = false;
         StringBuilder msg = new StringBuilder();
         System.out.println("please enter file's full path:");
@@ -119,7 +125,7 @@ public class ConsoleUI implements IUI
         System.out.print(msg);
     }
 
-    private void printMsgAboutLoadedFile(boolean loadedSuccessfully,Boolean hasSameCompany, Boolean hasSameSymbol)
+    private void printMsgAboutLoadedFile(boolean loadedSuccessfully, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol)
     {
         StringBuilder msg = new StringBuilder();
         if(loadedSuccessfully)
@@ -129,18 +135,19 @@ public class ConsoleUI implements IUI
         }
         else
         {
-            if(hasSameCompany)
+            System.out.println("File was failed to load because:");
+            if(hasSameCompany.get())
             {
                 msg.append("The file contains two different stocks belong to the same company. ");
             }
-            if(hasSameSymbol)
+            if(hasSameSymbol.get())
             {
                 msg.append("File Contains two stocks with same Symbol");
             }
-
-            System.out.println(msg);
-
         }
+
+        System.out.println(msg +System.lineSeparator());
+
     }
 
     private boolean fileIsValid(String path)
@@ -221,8 +228,9 @@ public class ConsoleUI implements IUI
         boolean isValidAmount = false;
         while(!isValidAmount) {
             try {
-                System.out.println("Please insert a positive number of stocks for a transaction.");
-                amount = m_Scanner.nextInt();
+                System.out.println("Please insert number of stocks for a transaction( a positive number).");
+                Scanner scanner = new Scanner(System.in);
+                amount = scanner.nextInt();
                 if (amount <= 0)
                     System.out.println("Number of stock to trade should be positive");
                 else
@@ -262,7 +270,7 @@ public class ConsoleUI implements IUI
 
     private void stockNotExists(String stockName)
     {
-        System.out.println("There is no stock called " + stockName + "in the system");
+        System.out.println("There is no stock called " + stockName + " in the system");
     }
 
     private int getLimit()
@@ -273,7 +281,8 @@ public class ConsoleUI implements IUI
         {
             System.out.println("Please enter the limit(a positive number) for the transaction");
             try {
-                limit = m_Scanner.nextInt();
+                Scanner scanner = new Scanner(System.in);
+                limit = scanner.nextInt();
                 if(limit > 0)
                 {
                     isValidLimit = true;
@@ -320,7 +329,7 @@ public class ConsoleUI implements IUI
     {
         if(m_LoadSuccessfully)
         {
-            System.out.println("Please enter stock's name:");
+            System.out.println("Please enter stock's Symbol:");
             String stockName = m_Scanner.next();
             PresentStockDetails(stockName);
         }
@@ -333,6 +342,125 @@ public class ConsoleUI implements IUI
 
     @Override
     public void exit() {
-        System.out.println("Thank you for using Rizpa stock exchange system");
+
+            System.out.println("Would you like to save current system's status?(Y/N)");
+            String choice = getUserSavingStatusChoice();
+        if (m_LoadSuccessfully) {
+            if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
+                try {
+                    Files.delete(Paths.get(FILE_TEXT_PATH_NAME));
+                } catch (IOException e) {
+                }
+            }
+            if (choice.toUpperCase().equals("Y")) {
+                try {
+                    writeEngineToFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+            System.out.println("There is nothing to save currently(data about the system was never loaded)");
+            System.out.println("Thank you for using Rizpa stock exchange system");
+
     }
+
+    private String getUserSavingStatusChoice() {
+        String choice = null;
+        boolean isValidChoice = false;
+        while(!isValidChoice)
+        {
+            choice = m_Scanner.next();
+            if(choice.toUpperCase().equals("Y") || choice.toUpperCase().equals("N"))
+            {
+                isValidChoice = true;
+            }
+            else
+            {
+                System.out.println("you've inserted something that is not 'Y' or 'N'");
+                System.out.println("Please insert 'Y' if you like to save system's current status otherwise insert 'N'");
+            }
+        }
+
+        return choice;
+    }
+
+    public void writeEngineToFile() throws IOException
+    {
+        boolean isValidPath = false;
+        while (!isValidPath) {
+            System.out.println("Insert path to save");
+            String path = m_Scanner.next();
+            String allPath = path +"\\"+ FILE_OBJECT_NAME;
+            deletePreviousFiles(allPath);
+            if (Files.exists(Paths.get(path))) {
+                isValidPath = true;
+                try (DataOutputStream out = new DataOutputStream(
+                        new BufferedOutputStream(
+                                new FileOutputStream(FILE_TEXT_PATH_NAME)))) {
+                        out.writeUTF(allPath);
+                        writeEngine(allPath);
+                }
+                catch (FileNotFoundException e)
+                {
+                    isValidPath = false;
+                    System.out.println("No permission to access to "+ path);
+                }
+            } else {
+                System.out.println("There is no path:'" + path + "' in this computer");
+            }
+        }
+    }
+
+    private void deletePreviousFiles(String allPath) throws IOException {
+        if(Files.exists(Paths.get(allPath)))
+            Files.delete(Paths.get(allPath));
+    }
+
+    private void writeEngine(String path) throws IOException {
+        try(ObjectOutputStream out =
+                    new ObjectOutputStream(
+                            new FileOutputStream(path)))
+        {
+            out.writeObject(m_Facade.getEngine());
+            out.flush();
+        }
+    }
+
+    @Override
+    public void readEngineFromFile() throws IOException, ClassNotFoundException {
+       if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
+           try (DataInputStream in =
+                        new DataInputStream(
+                                new FileInputStream(FILE_TEXT_PATH_NAME)))
+           {
+               String path = in.readUTF();
+               if (Files.exists(Paths.get(path))) {
+                   readEngine(path);
+                   System.out.println("Previous data was loaded successfully." + System.lineSeparator());
+               } else {
+                   System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
+               }
+           }
+       }
+       else
+       {
+           System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
+       }
+
+    }
+
+    private void readEngine(String path) throws IOException, ClassNotFoundException {
+
+        try(ObjectInputStream in =
+                    new ObjectInputStream(
+                            new FileInputStream(path)))
+        {
+            IStockEngine EngineFromFile = (IStockEngine)in.readObject();
+            m_Facade.setEngine(EngineFromFile);
+            m_LoadSuccessfully = true;
+        }
+    }
+
 }

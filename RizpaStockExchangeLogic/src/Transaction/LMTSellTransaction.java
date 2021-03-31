@@ -14,7 +14,7 @@ public class LMTSellTransaction extends MKTOrLMTTransaction{
     }
 
     @Override
-    protected boolean checkLimit(int limitToCompareTo) {
-        return m_Limit <= limitToCompareTo;
+    protected boolean checkLimit(ITransaction transaction) {
+        return m_Limit <= transaction.getPriceOfStock();
     }
 }

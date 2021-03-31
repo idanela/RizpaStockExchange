@@ -24,7 +24,7 @@ public class PrintUtils {
         System.out.println("Company: "+stock.getStockHolder());
         System.out.println("Price: "+stock.getCurrentPrice());
         System.out.println("Number Of Transactions made: " + stock.getNumOfTransaction());
-        System.out.println("Transactions worth:" +stock.getWorthOfTransactions());
+        System.out.println("Transactions worth:" +stock.getWorthOfTransactions()+System.lineSeparator());
     }
 
     public static void printAllStockTransactions(Stock stock)
@@ -39,11 +39,11 @@ public class PrintUtils {
 
     private static void printTransaction(ITransaction transaction)
     {
-        System.out.println("Symbol: "+transaction.getStock().getStockName());
+        System.out.println(System.lineSeparator()+"Symbol: "+transaction.getStock().getStockName());
         System.out.println("Date: "+transaction.getDateOfTransaction());
         System.out.println("Amount: "+transaction.getNumOfStocks());
         System.out.println("Price: "+transaction.getPriceOfStock());
-        System.out.println("Total worth: "+transaction.getTransactionWorth()+System.lineSeparator());
+        System.out.println("Total worth: "+transaction.getTransactionWorth());
     }
 
     public static void printDetailedInfoAboutStock(Stock stock)
@@ -56,31 +56,31 @@ public class PrintUtils {
     {
         if(transactionsMade.size() == 0)
         {
-            System.out.println("Counter Transaction was not found.");
+            System.out.println("Counter Transaction was not found."+System.lineSeparator());
             return;
         }
 
         int amountPurchase = 0;
         for(TransactionMade transaction: transactionsMade)
         {
-            amountPurchase+=transaction.getNumOfStocks();
+            amountPurchase += transaction.getNumOfStocks();
         }
         if(amount == amountPurchase)
         {
-            System.out.println("Transaction made fully.");
+            System.out.println("Transaction made fully."+System.lineSeparator());
         }
         else
         {
-            System.out.println("Transaction made partially.");
+            System.out.println("Transaction made partially."+System.lineSeparator());
         }
 
     }
 
     public static void printAllTransactionInSystem(IStockEngine engine)
     {
-        printTransactions("Transaction List:",engine.getTransactionList());
-        printTransactions("Pending Buy Transactions",engine.getPendingBuyTransactions());
-        printTransactions("Pending Sell Transactions",engine.getPendingSellTransactions());
+        printTransactions("Transaction made List:",engine.getTransactionList());
+        printTransactions("Pending Buy Transactions:",engine.getPendingBuyTransactions());
+        printTransactions("Pending Sell Transactions:",engine.getPendingSellTransactions());
     }
 
     private static void printTransactions(String List, List<ITransaction> transactionList)
@@ -89,7 +89,7 @@ public class PrintUtils {
         System.out.println(List);
         if(transactionList.isEmpty())
         {
-            System.out.println("There is no transaction in that list");
+            System.out.println("There is no transactions in that list");
         }
         else
         {
@@ -100,7 +100,7 @@ public class PrintUtils {
             }
         }
 
-        System.out.println("Total worth of All Transaction in the list: "+sumOfAllTransactions);
+        System.out.println("Total worth of All Transactions in the list: " + sumOfAllTransactions + System.lineSeparator());
     }
 
 }

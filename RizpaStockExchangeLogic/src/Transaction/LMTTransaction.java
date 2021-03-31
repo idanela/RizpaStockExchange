@@ -2,29 +2,27 @@ package Transaction;
 
 import Stocks.Stock;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
+public abstract class LMTTransaction extends AllTransactionsKind {
 
-    public MKTOrLMTTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
+    public LMTTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
         super(m_Stock, m_Limit, m_NumOfStocks);
     }
 
-    public MKTOrLMTTransaction() {
+    public LMTTransaction() {
 
     }
 
     protected abstract boolean checkLimit(ITransaction transaction);
 
+
     @Override
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
+    public boolean doTransaction(List<TransactionMade> transactionsMade,List<ITransaction> transactionsToScan, List<ITransaction> toAdd, List<ITransaction> toRemove)
+    {
         boolean isFinished = false;
-        List<TransactionMade> transactionsMade = new LinkedList<>();
-        List<ITransaction> toRemove = new ArrayList<>();
         for(ITransaction transaction: transactionsToScan) {
             if(m_Stock.equals(transaction.getStock())) {
                 if(checkLimit(transaction)) {
@@ -35,13 +33,7 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
                 }
             }
         }
-        transactionsToScan.removeAll(toRemove);
-        if(!isFinished)
-        {
-            toAdd.add(0,this);
-        }
-
-        return transactionsMade;
+        return isFinished;
     }
 
     private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction counterTransaction, List<TransactionMade> transactionsMade)
@@ -54,8 +46,7 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
             numOfTransactionStocks = counterTransaction.getNumOfStocks();
             newTransaction = new TransactionMade(m_Stock,numOfTransactionStocks,counterTransaction.getPriceOfStock());
             this.m_NumOfStocks =  m_NumOfStocks - numOfTransactionStocks;
-            if(this instanceof MKTTransaction)
-                this.m_Limit = counterTransaction.getPriceOfStock();
+            this.m_Limit = counterTransaction.getPriceOfStock();
         }
         else
         {
@@ -73,6 +64,4 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
 
         return isFinished;
     }
-
-
 }

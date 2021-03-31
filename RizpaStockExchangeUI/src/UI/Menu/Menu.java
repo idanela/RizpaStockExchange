@@ -56,10 +56,12 @@ public class Menu {
 
     private boolean  getUserSelection(IntHolder userSelection, boolean oneTimeOperation) {
         boolean userQuit = false;
-        userSelection.value = m_Scanner.nextInt();
-        if(userSelection.value < 0 && userSelection.value > m_MenuItems.size())
+        Scanner scanner = new Scanner(System.in);
+
+        userSelection.value = scanner.nextInt();
+        if(userSelection.value < 0 || userSelection.value > m_MenuItems.size())
         {
-            throw new IndexOutOfBoundsException("Number Should be between 1-"+ m_MenuItems.size());
+            throw new IndexOutOfBoundsException();
         }
         else if(userSelection.value == m_MenuItems.size() || oneTimeOperation)
         {

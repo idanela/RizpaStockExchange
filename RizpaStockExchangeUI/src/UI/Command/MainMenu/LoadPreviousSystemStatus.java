@@ -14,13 +14,8 @@ public class LoadPreviousSystemStatus implements ICommand {
     }
 
     @Override
-    public void execute()  {
-        try {
-            UI.readEngineFromFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void execute()
+    {
+        UI.readEngineFromFile();
     }
 }

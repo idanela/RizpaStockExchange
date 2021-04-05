@@ -8,7 +8,8 @@ import Transaction.*;
 import UI.Command.MainMenu.*;
 import UI.Command.OrderMenu.LMTBuyCommand;
 import UI.Command.OrderMenu.LMTSellCommand;
-import UI.Command.OrderMenu.MKTCommand;
+import UI.Command.OrderMenu.MKTBuyCommand;
+import UI.Command.OrderMenu.MKTSellCommand;
 import UI.Menu.Menu;
 import UI.menuItem.MenuItem;
 import UI.printUtils.PrintUtils;
@@ -28,7 +29,7 @@ public class ConsoleUI implements IUI
     private Menu m_MainMenu;
     private Menu m_BuyOrderMenu;
     private Menu m_SellOrderMenu;
-    private AllTransactionsKind m_TransactionToUse;
+    private AllTransactionsKinds m_TransactionToUse;
     private static final String FILE_TEXT_PATH_NAME = "EnginePathSaver.txt";
     private static final String FILE_OBJECT_NAME = "EngineData.dat";
 
@@ -53,7 +54,7 @@ public class ConsoleUI implements IUI
     }
 
     @Override
-    public void setTransactionToUse(AllTransactionsKind transaction) {
+    public void setTransactionToUse(AllTransactionsKinds transaction) {
             this.m_TransactionToUse = transaction;
     }
 
@@ -75,7 +76,7 @@ public class ConsoleUI implements IUI
     {
         List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(new MenuItem("LMT",new LMTBuyCommand(this)));
-        menuItems.add(new MenuItem("MKT",new MKTCommand(this)));
+        menuItems.add(new MenuItem("MKT",new MKTBuyCommand(this)));
 
         return menuItems;
     }
@@ -83,7 +84,7 @@ public class ConsoleUI implements IUI
     private List<MenuItem> initializeSellOrderMenu() {
         List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(new MenuItem("LMT",new LMTSellCommand(this)));
-        menuItems.add(new MenuItem("MKT",new MKTCommand(this)));
+        menuItems.add(new MenuItem("MKT",new MKTSellCommand(this)));
 
         return menuItems;
     }
@@ -96,7 +97,7 @@ public class ConsoleUI implements IUI
         boolean loadedSuccessfully = false;
         StringBuilder msg = new StringBuilder();
         System.out.println("please enter file's full path:");
-        String path = m_Scanner.next();
+        String path = m_Scanner.nextLine();
         if(fileIsValid(path))
         {
             loadedSuccessfully = m_Facade.loadStocksData(path,hasSameCompany,hasSameSymbol);
@@ -185,8 +186,8 @@ public class ConsoleUI implements IUI
     public void preformTransaction() {
         if(m_LoadSuccessfully) {
             String choice = getBuyOrSellOrder();
-            System.out.println("Please enter stock name");
-            String StockName = m_Scanner.next().toUpperCase();
+            System.out.println("Please enter stock's symbol:");
+            String StockName = m_Scanner.nextLine().toUpperCase();
             if (!m_Facade.isStockExists(StockName)) {
                 System.out.println("There is no stock by that name.");
                 return;
@@ -221,7 +222,6 @@ public class ConsoleUI implements IUI
             sellStocks(m_TransactionToUse);
         }
     }
-
 
     private int getNumberOfStocksToPreformTransaction() {
         int amount =0;
@@ -306,7 +306,7 @@ public class ConsoleUI implements IUI
         while(!isValid)
         {
             System.out.println("Please insert 'B' for Buying stock or 'S' to sell it");
-            choice= m_Scanner.next();
+            choice= m_Scanner.nextLine();
             if (!choice.toUpperCase().equals("B") && !choice.toUpperCase().equals("S"))
             {
                 System.out.println("You have Entered Invalid Choice.");
@@ -330,7 +330,7 @@ public class ConsoleUI implements IUI
         if(m_LoadSuccessfully)
         {
             System.out.println("Please enter stock's Symbol:");
-            String stockName = m_Scanner.next();
+            String stockName = m_Scanner.nextLine();
             PresentStockDetails(stockName);
         }
         else
@@ -371,7 +371,7 @@ public class ConsoleUI implements IUI
         boolean isValidChoice = false;
         while(!isValidChoice)
         {
-            choice = m_Scanner.next();
+            choice = m_Scanner.nextLine();
             if(choice.toUpperCase().equals("Y") || choice.toUpperCase().equals("N"))
             {
                 isValidChoice = true;
@@ -391,7 +391,7 @@ public class ConsoleUI implements IUI
         boolean isValidPath = false;
         while (!isValidPath) {
             System.out.println("Insert path to save");
-            String path = m_Scanner.next();
+            String path = m_Scanner.nextLine();
             String allPath = path +"\\"+ FILE_OBJECT_NAME;
             deletePreviousFiles(allPath);
             if (Files.exists(Paths.get(path))) {
@@ -429,25 +429,31 @@ public class ConsoleUI implements IUI
     }
 
     @Override
-    public void readEngineFromFile() throws IOException, ClassNotFoundException {
-       if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
-           try (DataInputStream in =
-                        new DataInputStream(
-                                new FileInputStream(FILE_TEXT_PATH_NAME)))
-           {
-               String path = in.readUTF();
-               if (Files.exists(Paths.get(path))) {
-                   readEngine(path);
-                   System.out.println("Previous data was loaded successfully." + System.lineSeparator());
-               } else {
-                   System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
-               }
-           }
-       }
-       else
-       {
-           System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
-       }
+    public void readEngineFromFile() {
+        try {
+            if (Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
+                try (DataInputStream in =
+                             new DataInputStream(
+                                     new FileInputStream(FILE_TEXT_PATH_NAME))) {
+                    String path = in.readUTF();
+                    if (Files.exists(Paths.get(path))) {
+                        readEngine(path);
+                        System.out.println("Previous data was loaded successfully." + System.lineSeparator());
+                    } else {
+                        System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
+                    }
+                }
+            } else {
+                System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 

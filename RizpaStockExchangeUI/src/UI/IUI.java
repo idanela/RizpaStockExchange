@@ -1,7 +1,7 @@
 package UI;
 
 import StockExchangeEngine.IStockEngine;
-import Transaction.AllTransactionsKind;
+import Transaction.AllTransactionsKinds;
 import UI.Menu.Menu;
 
 import java.io.IOException;
@@ -15,8 +15,7 @@ public interface IUI
     public void presentCommandListForExecution();
     public void exit();
     public void getStockDetails();
-    public void setTransactionToUse(AllTransactionsKind lmtBuyTransaction);
+    public void setTransactionToUse(AllTransactionsKinds lmtBuyTransaction);
     public Menu getMainMenu();
-    public void readEngineFromFile() throws IOException,ClassNotFoundException;
-
+    public void readEngineFromFile();
 }

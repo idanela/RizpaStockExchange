@@ -2,7 +2,11 @@ package Transaction;
 
 import Stocks.Stock;
 
-public class MKTTransaction extends MKTOrLMTTransaction {
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public abstract class MKTTransaction extends AllTransactionsKinds {
     public MKTTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
         super(m_Stock, m_Limit, m_NumOfStocks);
     }
@@ -10,8 +14,8 @@ public class MKTTransaction extends MKTOrLMTTransaction {
     public MKTTransaction() {
     }
 
+
     @Override
-    protected boolean checkLimit(int limitToCompareTo) {
-        return true;
-    }
+    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan);
+
 }

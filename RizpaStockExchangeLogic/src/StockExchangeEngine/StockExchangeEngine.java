@@ -18,7 +18,7 @@ public class StockExchangeEngine implements IStockEngine
 
 
     public StockExchangeEngine() {
-        this.m_AllStocks = new HashMap<>();
+        this.m_AllStocks = null;
         this.m_Transactions = new LinkedList<>();
         this.m_PendingBuyTransactions = new LinkedList<>();
         this.m_PendingSellTransactions = new LinkedList<>();
@@ -84,6 +84,7 @@ public class StockExchangeEngine implements IStockEngine
     private void loadClasses(RizpaStockExchangeDescriptor descriptor)
     {
        List<RseStock> stocks = descriptor.getRseStocks().getRseStock();
+       m_AllStocks = new HashMap<>();
        for (RseStock stock : stocks)
        {
             m_AllStocks.put(stock.getRseSymbol(),new Stock(stock));

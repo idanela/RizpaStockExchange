@@ -8,32 +8,76 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
+public abstract class AllTransactionsKinds implements ITransaction{
 
-    public MKTOrLMTTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
-        super(m_Stock, m_Limit, m_NumOfStocks);
+
+    Stock m_Stock;
+    int m_Limit;
+    int m_NumOfStocks;
+    String m_DateOfTransaction;
+
+    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks) {
+        this.m_Stock = stock;
+        this.m_Limit = limit;
+        this.m_NumOfStocks = numOfStocks;
+        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
     }
 
-    public MKTOrLMTTransaction() {
-
+    public AllTransactionsKinds() {
     }
 
-    protected abstract boolean checkLimit(ITransaction transaction);
+    public void setProperties(Stock stock, int limit, int numOfStocks) {
+        this.m_Stock = stock;
+        this.m_Limit = limit;
+        this.m_NumOfStocks = numOfStocks;
+        this.m_DateOfTransaction = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+    }
+
+    @Override
+    public void setNumOfStocks(int number) {
+        m_NumOfStocks = number;
+    }
+
+    @Override
+    public Stock getStock() {
+        return m_Stock;
+    }
+
+    @Override
+    public int getNumOfStocks() {
+        return m_NumOfStocks;
+    }
+
+    @Override
+    public String getDateOfTransaction() {
+        return m_DateOfTransaction;
+    }
+
+    @Override
+    public int getPriceOfStock() {
+        return m_Limit;
+    }
+
+    @Override
+    public int getTransactionWorth() {
+        return m_Limit * m_NumOfStocks;
+    }
+
+    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan);
 
     @Override
     public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
         List<ITransaction> toRemove = new ArrayList<>();
-        for(ITransaction transaction: transactionsToScan) {
-            if(m_Stock.equals(transaction.getStock())) {
-                if(checkLimit(transaction)) {
+        List<ITransaction> toScanSorted = sortAndFilterTransaction(transactionsToScan);
+        for(ITransaction transaction: toScanSorted) {
+                    if(m_Stock.equals(transaction.getStock())) {
                     if(m_NumOfStocks >= transaction.getNumOfStocks())
                         toRemove.add(transaction);
                     if (isFinished = preformTransaction(transactionsToScan, transaction ,transactionsMade))
                         break;
                 }
-            }
         }
         transactionsToScan.removeAll(toRemove);
         if(!isFinished)
@@ -43,6 +87,7 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
 
         return transactionsMade;
     }
+
 
     private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction counterTransaction, List<TransactionMade> transactionsMade)
     {
@@ -54,7 +99,7 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
             numOfTransactionStocks = counterTransaction.getNumOfStocks();
             newTransaction = new TransactionMade(m_Stock,numOfTransactionStocks,counterTransaction.getPriceOfStock());
             this.m_NumOfStocks =  m_NumOfStocks - numOfTransactionStocks;
-            if(this instanceof MKTTransaction)
+           if(this instanceof MKTBuyTransaction)
                 this.m_Limit = counterTransaction.getPriceOfStock();
         }
         else
@@ -73,6 +118,5 @@ public abstract class MKTOrLMTTransaction extends AllTransactionsKind{
 
         return isFinished;
     }
-
 
 }

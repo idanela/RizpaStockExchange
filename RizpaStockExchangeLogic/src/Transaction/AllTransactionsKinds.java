@@ -30,7 +30,7 @@ public abstract class AllTransactionsKinds implements ITransaction{
         this.m_Stock = stock;
         this.m_Limit = limit;
         this.m_NumOfStocks = numOfStocks;
-        this.m_DateOfTransaction = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());;
     }
 
     @Override

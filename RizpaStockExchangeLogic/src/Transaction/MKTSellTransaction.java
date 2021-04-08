@@ -13,6 +13,7 @@ public class MKTSellTransaction extends MKTTransaction {
         Collections.sort(transactionsToScan, new Comparator<ITransaction>() {
             @Override
             public int compare(ITransaction t1, ITransaction t2) {
+
                 return t1.getPriceOfStock() - t2.getPriceOfStock();
             }
         });

@@ -20,9 +20,9 @@ public class LMTSellTransaction extends AllTransactionsKinds{
     protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan) {
         List<ITransaction>sortedAndFiltered = transactionsToScan
                 .stream()
-                .filter(transaction -> transaction.getPriceOfStock() > m_Limit)
+                .filter(transaction -> transaction.getPriceOfStock() >= m_Limit)
                 .collect(Collectors.toList());
-        Collections.sort(transactionsToScan, new Comparator<ITransaction>() {
+        Collections.sort(sortedAndFiltered, new Comparator<ITransaction>() {
             @Override
             public int compare(ITransaction t1, ITransaction t2) {
                 return t1.getPriceOfStock() - t2.getPriceOfStock() ;

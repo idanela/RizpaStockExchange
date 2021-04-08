@@ -345,6 +345,7 @@ public class ConsoleUI implements IUI
 
             System.out.println("Would you like to save current system's status?(Y/N)");
             String choice = getUserSavingStatusChoice();
+
         if (m_LoadSuccessfully) {
             if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
                 try {
@@ -354,6 +355,7 @@ public class ConsoleUI implements IUI
             }
             if (choice.toUpperCase().equals("Y")) {
                 try {
+                   // String path = getFullPathToSaveAt();
                     writeEngineToFile();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -385,6 +387,13 @@ public class ConsoleUI implements IUI
 
         return choice;
     }
+
+ /*   private String getFullPathToSaveAt() {
+        System.out.println("Please enter full path to file you want to save current system's state:");
+        String path = m_Scanner.nextLine();
+    return null ///frgmfjgikrtjgot@#!@#!@$@#$!@#$!@#$$!@!$!@#$
+
+    }*/
 
     public void writeEngineToFile() throws IOException
     {
@@ -451,22 +460,32 @@ public class ConsoleUI implements IUI
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
     }
 
-    private void readEngine(String path) throws IOException, ClassNotFoundException {
+    private void readEngine(String path)  {
 
         try(ObjectInputStream in =
                     new ObjectInputStream(
                             new FileInputStream(path)))
         {
-            IStockEngine EngineFromFile = (IStockEngine)in.readObject();
-            m_Facade.setEngine(EngineFromFile);
-            m_LoadSuccessfully = true;
+            try
+            {
+               IStockEngine EngineFromFile = (IStockEngine)in.readObject();
+                m_Facade.setEngine(EngineFromFile);
+                m_LoadSuccessfully = true;
+            }
+            catch (ClassNotFoundException e)
+            {
+                System.out.println("Class to load was not found in the system.");
+            }
         }
+        catch (IOException e)
+        {
+            System.out.println("File to read from can not be accessed.");
+        }
+
     }
 
 }

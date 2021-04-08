@@ -16,6 +16,6 @@ public class LoadPreviousSystemStatus implements ICommand {
     @Override
     public void execute()
     {
-        UI.readEngineFromFile();
+        UI.readEngineDataFromFile();
     }
 }

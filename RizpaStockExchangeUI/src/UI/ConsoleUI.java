@@ -10,7 +10,7 @@ import UI.Command.OrderMenu.LMTBuyCommand;
 import UI.Command.OrderMenu.LMTSellCommand;
 import UI.Command.OrderMenu.MKTBuyCommand;
 import UI.Command.OrderMenu.MKTSellCommand;
-import UI.Menu.Menu;
+import UI.menu.Menu;
 import UI.menuItem.MenuItem;
 import UI.printUtils.PrintUtils;
 
@@ -347,23 +347,27 @@ public class ConsoleUI implements IUI
             String choice = getUserSavingStatusChoice();
 
         if (m_LoadSuccessfully) {
-            if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
-                try {
-                    Files.delete(Paths.get(FILE_TEXT_PATH_NAME));
-                } catch (IOException e) {
-                }
-            }
             if (choice.toUpperCase().equals("Y")) {
-                try {
-                   // String path = getFullPathToSaveAt();
-                    writeEngineToFile();
-                } catch (IOException e) {
+                // try {
+                // String path = getFullPathToSaveAt();
+                // writeEngineToFile();
+                writeSystemEngineToFile();
+              /*  } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }*/
             }
-        }
+            }
         else
             System.out.println("There is nothing to save currently(data about the system was never loaded)");
+
+            /*if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
+               *//* try {
+                    Files.delete(Paths.get(FILE_TEXT_PATH_NAME));
+                } catch (IOException e) {
+                }*/
+
+
             System.out.println("Thank you for using Rizpa stock exchange system");
 
     }
@@ -395,11 +399,26 @@ public class ConsoleUI implements IUI
 
     }*/
 
+    public void writeSystemEngineToFile()
+    {
+        boolean isValidPath = false;
+        while(!isValidPath)
+        {
+            isValidPath = true;
+            System.out.println("Please insert full path for a file to save current system status.");
+            String path = m_Scanner.nextLine();
+            //deletePreviousFiles(path);
+            isValidPath = writeEngine(path);
+        }
+
+        System.out.println("Data of system was saved successfully");
+
+    }
     public void writeEngineToFile() throws IOException
     {
         boolean isValidPath = false;
         while (!isValidPath) {
-            System.out.println("Insert path to save");
+            System.out.println("Insert full path to save");
             String path = m_Scanner.nextLine();
             String allPath = path +"\\"+ FILE_OBJECT_NAME;
             deletePreviousFiles(allPath);
@@ -427,7 +446,8 @@ public class ConsoleUI implements IUI
             Files.delete(Paths.get(allPath));
     }
 
-    private void writeEngine(String path) throws IOException {
+    private boolean writeEngine(String path) {
+        boolean isValidPath = true;
         try(ObjectOutputStream out =
                     new ObjectOutputStream(
                             new FileOutputStream(path)))
@@ -435,6 +455,37 @@ public class ConsoleUI implements IUI
             out.writeObject(m_Facade.getEngine());
             out.flush();
         }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("path to save file at is not exists in this computer");
+            isValidPath = false;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            isValidPath = false;
+        }
+
+        return isValidPath;
+    }
+
+
+    @Override
+    public void readEngineDataFromFile() {
+        try {
+            System.out.println("Enter a path for a file to read previous system data from ");
+            String path = m_Scanner.nextLine();
+            if (Files.exists(Paths.get(path))) {
+                readEngine(path);
+                System.out.println("Previous data was loaded successfully." + System.lineSeparator());
+            } else {
+                System.out.println("Path: " + path+ " doesn't exists on this computer." + System.lineSeparator());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

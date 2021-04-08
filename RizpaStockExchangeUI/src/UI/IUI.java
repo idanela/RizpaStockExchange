@@ -2,7 +2,7 @@ package UI;
 
 import StockExchangeEngine.IStockEngine;
 import Transaction.AllTransactionsKinds;
-import UI.Menu.Menu;
+import UI.menu.Menu;
 
 import java.io.IOException;
 
@@ -18,4 +18,5 @@ public interface IUI
     public void setTransactionToUse(AllTransactionsKinds lmtBuyTransaction);
     public Menu getMainMenu();
     public void readEngineFromFile();
+    public void readEngineDataFromFile();
 }

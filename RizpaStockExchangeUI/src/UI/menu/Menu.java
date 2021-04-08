@@ -1,4 +1,4 @@
-package UI.Menu;
+package UI.menu;
 
 import UI.menuItem.MenuItem;
 import org.omg.CORBA.IntHolder;

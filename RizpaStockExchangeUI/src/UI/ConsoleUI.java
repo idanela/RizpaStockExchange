@@ -32,6 +32,7 @@ public class ConsoleUI implements IUI
     private AllTransactionsKinds m_TransactionToUse;
     private static final String FILE_TEXT_PATH_NAME = "EnginePathSaver.txt";
     private static final String FILE_OBJECT_NAME = "EngineData.dat";
+    private IStockEngine engine;
 
 
     public ConsoleUI() {
@@ -476,6 +477,7 @@ public class ConsoleUI implements IUI
             String path = m_Scanner.nextLine();
             if (Files.exists(Paths.get(path))) {
                 readEngine(path);
+                if(m_LoadSuccessfully)
                 System.out.println("Previous data was loaded successfully." + System.lineSeparator());
             } else {
                 System.out.println("Path: " + path+ " doesn't exists on this computer." + System.lineSeparator());
@@ -515,28 +517,25 @@ public class ConsoleUI implements IUI
 
     }
 
-    private void readEngine(String path)  {
+    private void readEngine(String path) {
 
-        try(ObjectInputStream in =
-                    new ObjectInputStream(
-                            new FileInputStream(path)))
-        {
-            try
-            {
-               IStockEngine EngineFromFile = (IStockEngine)in.readObject();
+        try (ObjectInputStream in =
+                     new ObjectInputStream(
+                             new FileInputStream(path))) {
+            try {
+                IStockEngine EngineFromFile = (IStockEngine) in.readObject();
                 m_Facade.setEngine(EngineFromFile);
                 m_LoadSuccessfully = true;
-            }
-            catch (ClassNotFoundException e)
-            {
+            } catch (ClassNotFoundException e) {
                 System.out.println("Class to load was not found in the system.");
             }
-        }
-        catch (IOException e)
-        {
+        } catch (StreamCorruptedException e) {
+            System.out.println("File is not suitable to load data from it to system (doesn't contain data about the system)");
+        } catch (IOException e) {
             System.out.println("File to read from can not be accessed.");
         }
 
     }
-
 }
+
+

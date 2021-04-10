@@ -82,7 +82,7 @@ public abstract class AllTransactionsKinds implements ITransaction{
         transactionsToScan.removeAll(toRemove);
         if(!isFinished)
         {
-            toAdd.add(0,this);
+            toAdd.add(this);
         }
 
         return transactionsMade;

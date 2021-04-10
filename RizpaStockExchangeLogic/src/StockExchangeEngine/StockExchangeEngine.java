@@ -62,7 +62,8 @@ public class StockExchangeEngine implements IStockEngine
     @Override
     public void addTransactionMade(TransactionMade transactionMade) {
         transactionMade.getStock().setNumOfTransaction(transactionMade.getStock().getNumOfTransaction()+1);
-        m_Transactions.add(0,transactionMade);
+        //m_Transactions.add(0,transactionMade);
+        m_Transactions.add(transactionMade);
     }
 
     @Override

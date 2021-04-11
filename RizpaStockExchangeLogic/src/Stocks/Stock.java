@@ -86,17 +86,4 @@ public class Stock implements Serializable {
     {
         m_Transactions.add(transaction);
     }
-
-
-
-    public void sortTransactionByDate(List<TransactionMade> transactions)
-    {
-        Collections.sort(transactions, new Comparator<TransactionMade>(){
-        @Override
-            public int compare(TransactionMade t1, TransactionMade t2)
-        {
-            return t1.getDateOfTransaction().compareTo(t2.getDateOfTransaction()) ;
-        }
-    });
-    }
 }

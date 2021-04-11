@@ -2,10 +2,8 @@ package Transaction;
 
 import Stocks.Stock;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +17,9 @@ public class LMTBuyTransaction extends LMTTransaction {
     }
 
     @Override
-    protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan) {
-        List<ITransaction> sortedAndFiltered = (List<ITransaction>) transactionsToScan
-                .stream()
+    protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock stock) {
+        List<ITransaction> sortedAndFiltered = transactionsToScan
+                .stream().filter(transaction -> transaction.getStock().equals(stock))
                 .filter(transaction -> transaction.getPriceOfStock() <= m_Limit)
                 .collect(Collectors.toList());
         Collections.sort(sortedAndFiltered,new Comparator<ITransaction>() {
@@ -32,5 +30,11 @@ public class LMTBuyTransaction extends LMTTransaction {
         });
 
         return sortedAndFiltered;
+    }
+
+
+    @Override
+    protected boolean compareTransactionPrice(ITransaction transaction) {
+        return this.getPriceOfStock() > transaction.getPriceOfStock();
     }
 }

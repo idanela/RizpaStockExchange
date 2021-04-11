@@ -2,8 +2,6 @@ package Transaction;
 
 import Stocks.Stock;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class MKTTransaction extends AllTransactionsKinds {
@@ -14,8 +12,8 @@ public abstract class MKTTransaction extends AllTransactionsKinds {
     public MKTTransaction() {
     }
 
-
     @Override
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan);
+    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
+    protected abstract boolean compareTransactionPrice(ITransaction transaction);
 
 }

@@ -17,7 +17,6 @@ public interface IFacade
     public List<TransactionMade> buyStocks(ITransaction transaction);
     public Map<String, Stock> getStocks();
     public Stock getStock(String stockName);
-    //public void loadCommandListForExecution() ;
     public IStockEngine getEngine();
     void setEngine(IStockEngine engine);
 

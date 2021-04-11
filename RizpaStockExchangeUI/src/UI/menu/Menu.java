@@ -16,7 +16,6 @@ public class Menu {
         this.m_Scanner = new Scanner(System.in);
     }
 
-
     public void Run(boolean oneTimeOperation)
     {
         boolean userQuit = false;
@@ -69,7 +68,6 @@ public class Menu {
         }
 
         return userQuit;
-
     }
 }
 

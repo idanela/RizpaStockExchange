@@ -17,6 +17,5 @@ public interface IUI
     public void getStockDetails();
     public void setTransactionToUse(AllTransactionsKinds lmtBuyTransaction);
     public Menu getMainMenu();
-    public void readEngineFromFile();
     public void readEngineDataFromFile();
 }

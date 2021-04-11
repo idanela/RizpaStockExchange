@@ -16,7 +16,6 @@ public class StockExchangeEngine implements IStockEngine
     private List<ITransaction> m_PendingSellTransactions;
     private List<ITransaction> m_Transactions;
 
-
     public StockExchangeEngine() {
         this.m_AllStocks = null;
         this.m_Transactions = new LinkedList<>();
@@ -44,13 +43,6 @@ public class StockExchangeEngine implements IStockEngine
         return m_Transactions;
     }
 
-   // @Override
-/*
-    public boolean findTransaction(String stockName, double limit, int amountForTransaction) {
-        return false;
-    }
-*/
-
     @Override
     public void addTransactionsMade(List<TransactionMade> transactionsMade) {
         for (TransactionMade transactionMade:transactionsMade)
@@ -60,9 +52,9 @@ public class StockExchangeEngine implements IStockEngine
     }
 
     @Override
-    public void addTransactionMade(TransactionMade transactionMade) {
+    public void addTransactionMade(TransactionMade transactionMade)
+    {
         transactionMade.getStock().setNumOfTransaction(transactionMade.getStock().getNumOfTransaction()+1);
-        //m_Transactions.add(0,transactionMade);
         m_Transactions.add(transactionMade);
     }
 

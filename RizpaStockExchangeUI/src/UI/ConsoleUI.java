@@ -16,6 +16,7 @@ import UI.printUtils.PrintUtils;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,12 +63,12 @@ public class ConsoleUI implements IUI
     private List<MenuItem> initializeMainMenu()
     {
         List<MenuItem> menuItems = new ArrayList<>();
-        menuItems.add(new MenuItem("Load system previous status.",new LoadPreviousSystemStatus(this)));
         menuItems.add(new MenuItem("Load system file.",new LoadSystemDetailsCommand(this)));
         menuItems.add(new MenuItem("Present all stocks in the system.",new PresentAllStocksInSystemCommand(this)));
         menuItems.add(new MenuItem("Present a single stock details.",new PresentStockCommand(this)));
         menuItems.add(new MenuItem("Preform Transaction.",new PreformTransactionCommand(this)));
         menuItems.add(new MenuItem("Present Command list for execution.",new PresentCommandListForExecutionCommand(this)));
+        menuItems.add(new MenuItem("Load system previous status.",new LoadPreviousSystemStatus(this)));
         menuItems.add(new MenuItem("Exit",new ExitCommand(this)));
 
         return menuItems;
@@ -91,40 +92,38 @@ public class ConsoleUI implements IUI
     }
 
     @Override
-    public void loadStocksData()
-    {
-        AtomicBoolean hasSameSymbol = new AtomicBoolean(false);
-        AtomicBoolean hasSameCompany = new AtomicBoolean(false);
-        boolean loadedSuccessfully = false;
-        StringBuilder msg = new StringBuilder();
-        System.out.println("please enter file's full path:");
-        String path = m_Scanner.nextLine();
-        if(fileIsValid(path))
-        {
-            loadedSuccessfully = m_Facade.loadStocksData(path,hasSameCompany,hasSameSymbol);
-            printMsgAboutLoadedFile(loadedSuccessfully,hasSameCompany,hasSameSymbol);
+    public void loadStocksData() {
+        try {
+            AtomicBoolean hasSameSymbol = new AtomicBoolean(false);
+            AtomicBoolean hasSameCompany = new AtomicBoolean(false);
+            boolean loadedSuccessfully = false;
+            StringBuilder msg = new StringBuilder();
+            System.out.println("please enter file's full path:");
+            String path = m_Scanner.nextLine();
+            if (fileIsValid(path)) {
+                loadedSuccessfully = m_Facade.loadStocksData(path, hasSameCompany, hasSameSymbol);
+                printMsgAboutLoadedFile(loadedSuccessfully, hasSameCompany, hasSameSymbol);
+            } else {
+                printErrorsAboutFile(path);
+            }
         }
-        else
+        catch (InvalidPathException e)
         {
-            printErrorsAboutFile(path);
+            System.out.println("you inserted invalid character to path");
         }
     }
 
     private void printErrorsAboutFile(String path) {
-        StringBuilder msg = new StringBuilder("File is not valid because: "+System.lineSeparator());
-        if(!Files.exists(Paths.get(path)))
-        {
-            msg.append("File is not exists"+System.lineSeparator());
-        }
-        else
-        {
-            if (path.endsWith("xml"))
-            {
-                msg.append("File is not an xml file");
+        StringBuilder msg = new StringBuilder("File is not valid because: " + System.lineSeparator());
+            if (!Files.exists(Paths.get(path))) {
+                msg.append("File is not exists" + System.lineSeparator());
+            } else {
+                if (!path.endsWith("xml")) {
+                    msg.append("File is not an xml file" + System.lineSeparator());
+                }
             }
-        }
 
-        System.out.print(msg);
+            System.out.print(msg);
     }
 
     private void printMsgAboutLoadedFile(boolean loadedSuccessfully, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol)
@@ -152,9 +151,8 @@ public class ConsoleUI implements IUI
 
     }
 
-    private boolean fileIsValid(String path)
-    {
-         return Files.exists(Paths.get(path)) && path.endsWith("xml");
+    private boolean fileIsValid(String path) {
+        return Files.exists(Paths.get(path)) && path.endsWith("xml");
     }
 
     @Override
@@ -349,28 +347,12 @@ public class ConsoleUI implements IUI
 
         if (m_LoadSuccessfully) {
             if (choice.toUpperCase().equals("Y")) {
-                // try {
-                // String path = getFullPathToSaveAt();
-                // writeEngineToFile();
                 writeSystemEngineToFile();
-              /*  } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
             }
-            }
+        }
         else
             System.out.println("There is nothing to save currently(data about the system was never loaded)");
-
-            /*if(Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
-               *//* try {
-                    Files.delete(Paths.get(FILE_TEXT_PATH_NAME));
-                } catch (IOException e) {
-                }*/
-
-
             System.out.println("Thank you for using Rizpa stock exchange system");
-
     }
 
     private String getUserSavingStatusChoice() {
@@ -393,58 +375,17 @@ public class ConsoleUI implements IUI
         return choice;
     }
 
- /*   private String getFullPathToSaveAt() {
-        System.out.println("Please enter full path to file you want to save current system's state:");
-        String path = m_Scanner.nextLine();
-    return null ///frgmfjgikrtjgot@#!@#!@$@#$!@#$!@#$$!@!$!@#$
-
-    }*/
-
     public void writeSystemEngineToFile()
     {
         boolean isValidPath = false;
         while(!isValidPath)
         {
-            isValidPath = true;
             System.out.println("Please insert full path for a file to save current system status.");
             String path = m_Scanner.nextLine();
-            //deletePreviousFiles(path);
             isValidPath = writeEngine(path);
         }
 
         System.out.println("Data of system was saved successfully");
-
-    }
-    public void writeEngineToFile() throws IOException
-    {
-        boolean isValidPath = false;
-        while (!isValidPath) {
-            System.out.println("Insert full path to save");
-            String path = m_Scanner.nextLine();
-            String allPath = path +"\\"+ FILE_OBJECT_NAME;
-            deletePreviousFiles(allPath);
-            if (Files.exists(Paths.get(path))) {
-                isValidPath = true;
-                try (DataOutputStream out = new DataOutputStream(
-                        new BufferedOutputStream(
-                                new FileOutputStream(FILE_TEXT_PATH_NAME)))) {
-                        out.writeUTF(allPath);
-                        writeEngine(allPath);
-                }
-                catch (FileNotFoundException e)
-                {
-                    isValidPath = false;
-                    System.out.println("No permission to access to "+ path);
-                }
-            } else {
-                System.out.println("There is no path:'" + path + "' in this computer");
-            }
-        }
-    }
-
-    private void deletePreviousFiles(String allPath) throws IOException {
-        if(Files.exists(Paths.get(allPath)))
-            Files.delete(Paths.get(allPath));
     }
 
     private boolean writeEngine(String path) {
@@ -465,16 +406,19 @@ public class ConsoleUI implements IUI
             e.printStackTrace();
             isValidPath = false;
         }
-
         return isValidPath;
     }
-
 
     @Override
     public void readEngineDataFromFile() {
         try {
             System.out.println("Enter a path for a file to read previous system data from ");
             String path = m_Scanner.nextLine();
+        if(Files.isDirectory(Paths.get(path)))
+        {
+            System.out.println("path is not a file but a directory");
+            return;
+        }
             if (Files.exists(Paths.get(path))) {
                 readEngine(path);
                 if(m_LoadSuccessfully)
@@ -487,34 +431,6 @@ public class ConsoleUI implements IUI
         {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void readEngineFromFile() {
-        try {
-            if (Files.exists(Paths.get(FILE_TEXT_PATH_NAME))) {
-                try (DataInputStream in =
-                             new DataInputStream(
-                                     new FileInputStream(FILE_TEXT_PATH_NAME))) {
-                    String path = in.readUTF();
-                    if (Files.exists(Paths.get(path))) {
-                        readEngine(path);
-                        System.out.println("Previous data was loaded successfully." + System.lineSeparator());
-                    } else {
-                        System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
-                    }
-                }
-            } else {
-                System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Currently there is no previous data about the system that was saved." + System.lineSeparator());
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void readEngine(String path) {
@@ -531,10 +447,14 @@ public class ConsoleUI implements IUI
             }
         } catch (StreamCorruptedException e) {
             System.out.println("File is not suitable to load data from it to system (doesn't contain data about the system)");
-        } catch (IOException e) {
+        }
+        catch (EOFException e)
+        {
+            System.out.println("File is not suitable for load data from it to system (doesn't contain data about the system)");
+        }
+        catch (IOException e) {
             System.out.println("File to read from can not be accessed.");
         }
-
     }
 }
 

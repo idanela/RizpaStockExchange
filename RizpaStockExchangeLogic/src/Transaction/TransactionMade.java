@@ -14,7 +14,7 @@ public class TransactionMade implements ITransaction
     private int m_TransactionWorth;
 
     public TransactionMade(Stock stock,int amountOfStocks, int priceOfStock) {
-        this.m_stock =stock;
+        this.m_stock = stock;
         this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.m_AmountOfStocks = amountOfStocks;
         this.m_PriceOfStockSelledFor = priceOfStock;
@@ -49,11 +49,6 @@ public class TransactionMade implements ITransaction
         return null;
     }
 
-    /*@Override
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan,List<ITransaction> toAdd) {
-        return null;
-    }*/
-
     @Override
     public String toString() {
         return "Transaction{" +
@@ -63,10 +58,4 @@ public class TransactionMade implements ITransaction
                 ", m_TransactionWorth:" + m_TransactionWorth +
                 "}\r\n";
     }
-
-
-
-
-
-
 }

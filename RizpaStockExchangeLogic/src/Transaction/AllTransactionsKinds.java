@@ -63,30 +63,43 @@ public abstract class AllTransactionsKinds implements ITransaction{
         return m_Limit * m_NumOfStocks;
     }
 
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan);
+    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
 
     @Override
     public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
         List<ITransaction> toRemove = new ArrayList<>();
-        List<ITransaction> toScanSorted = sortAndFilterTransaction(transactionsToScan);
+        List<ITransaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock);
         for(ITransaction transaction: toScanSorted) {
-                    if(m_Stock.equals(transaction.getStock())) {
                     if(m_NumOfStocks >= transaction.getNumOfStocks())
                         toRemove.add(transaction);
                     if (isFinished = preformTransaction(transactionsToScan, transaction ,transactionsMade))
                         break;
-                }
         }
         transactionsToScan.removeAll(toRemove);
         if(!isFinished)
         {
-            toAdd.add(this);
+            AddTransactionToList(toAdd);
         }
 
         return transactionsMade;
     }
+
+    private void AddTransactionToList(List<ITransaction> toAdd)
+    {
+        for (int i = 0; i <toAdd.size() ; i++) {
+            if(compareTransactionPrice(toAdd.get(i)))
+            {
+                toAdd.add(i,this);
+                return;
+            }
+        }
+
+        toAdd.add(this);
+    }
+
+    protected abstract boolean compareTransactionPrice(ITransaction transaction);
 
 
     private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction counterTransaction, List<TransactionMade> transactionsMade)
@@ -108,15 +121,17 @@ public abstract class AllTransactionsKinds implements ITransaction{
             counterTransaction.setNumOfStocks(counterTransaction.getNumOfStocks() - m_NumOfStocks);
             m_NumOfStocks = 0;
         }
-        transactionsMade.add(0,newTransaction);
+        transactionsMade.add(newTransaction);
         this.m_Stock.addTransactionToStocksTransactionsList(newTransaction);
 
+        if(this instanceof MKTTransaction)
+            this.m_Limit = newTransaction.getPriceOfStock();
         if(m_NumOfStocks == 0)
-        {
             isFinished = true;
-        }
 
         return isFinished;
     }
+
+
 
 }

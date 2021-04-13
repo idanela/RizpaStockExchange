@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="RizpaStockExchangeUI">
+    <output-path>$PROJECT_DIR$/out/artifacts/ForSubmission</output-path>
+    <root id="root">
+      <element id="archive" name="RizpaStockExchangeUI.jar">
+        <element id="module-output" name="RizpaStockExchangeUI" />
+        <element id="module-output" name="RizpaStockExchangeFacade" />
+        <element id="module-output" name="RizpaStockExchangeLogic" />
+      </element>
+    </root>
+  </artifact>
+</component>

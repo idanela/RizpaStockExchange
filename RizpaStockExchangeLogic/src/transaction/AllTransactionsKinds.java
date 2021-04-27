@@ -1,6 +1,7 @@
 package transaction;
 
 import stocks.Stock;
+import user.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,18 +9,19 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AllTransactionsKinds implements ITransaction{
+public abstract class AllTransactionsKinds implements Transaction {
 
-
+    User initiator;
     Stock m_Stock;
     int m_Limit;
     int m_NumOfStocks;
     String m_DateOfTransaction;
 
-    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks) {
+    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks,User initiator) {
         this.m_Stock = stock;
         this.m_Limit = limit;
         this.m_NumOfStocks = numOfStocks;
+        this.initiator = initiator;
         this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
     }
 
@@ -63,15 +65,15 @@ public abstract class AllTransactionsKinds implements ITransaction{
         return m_Limit * m_NumOfStocks;
     }
 
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
+    protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock,String name);
 
     @Override
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
+    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd) {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
-        List<ITransaction> toRemove = new ArrayList<>();
-        List<ITransaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock);
-        for(ITransaction transaction: toScanSorted) {
+        List<Transaction> toRemove = new ArrayList<>();
+        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock,initiator.getName());
+        for(Transaction transaction: toScanSorted) {
                     if(m_NumOfStocks >= transaction.getNumOfStocks())
                         toRemove.add(transaction);
                     if (isFinished = preformTransaction(transactionsToScan, transaction ,transactionsMade))
@@ -86,7 +88,7 @@ public abstract class AllTransactionsKinds implements ITransaction{
         return transactionsMade;
     }
 
-    private void AddTransactionToList(List<ITransaction> toAdd)
+    private void AddTransactionToList(List<Transaction> toAdd)
     {
         for (int i = 0; i <toAdd.size() ; i++) {
             if(compareTransactionPrice(toAdd.get(i)))
@@ -99,10 +101,10 @@ public abstract class AllTransactionsKinds implements ITransaction{
         toAdd.add(this);
     }
 
-    protected abstract boolean compareTransactionPrice(ITransaction transaction);
+    protected abstract boolean compareTransactionPrice(Transaction transaction);
 
 
-    private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction counterTransaction, List<TransactionMade> transactionsMade)
+    private boolean preformTransaction(List<Transaction> i_transactionsToScan, Transaction counterTransaction, List<TransactionMade> transactionsMade)
     {
         boolean isFinished = false;
         int numOfTransactionStocks = 0;

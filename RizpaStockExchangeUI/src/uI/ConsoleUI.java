@@ -51,7 +51,7 @@ public class ConsoleUI implements IUI
         return m_MainMenu;
     }
 
-    public ITransaction getTransactionToUse() {
+    public Transaction getTransactionToUse() {
         return m_TransactionToUse;
     }
 
@@ -242,7 +242,7 @@ public class ConsoleUI implements IUI
         return amount;
     }
 
-    private void buyStocks(ITransaction transaction) {
+    private void buyStocks(Transaction transaction) {
         int amount = m_TransactionToUse.getNumOfStocks();
         if(m_Facade.isStockExists(transaction.getStock().getStockName()))
         {
@@ -255,7 +255,7 @@ public class ConsoleUI implements IUI
         }
     }
 
-    private void sellStocks(ITransaction transaction) {
+    private void sellStocks(Transaction transaction) {
         int amount = m_TransactionToUse.getNumOfStocks();
         if(m_Facade.isStockExists(transaction.getStock().getStockName())) {
             List<TransactionMade> transactions = m_Facade.sellStocks(m_TransactionToUse);

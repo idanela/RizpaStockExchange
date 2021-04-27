@@ -14,9 +14,9 @@ public abstract class LMTTransaction extends AllTransactionsKinds
     }
 
     @Override
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
+    protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
 
     @Override
-    protected abstract boolean compareTransactionPrice(ITransaction transaction);
+    protected abstract boolean compareTransactionPrice(Transaction transaction);
 }
 

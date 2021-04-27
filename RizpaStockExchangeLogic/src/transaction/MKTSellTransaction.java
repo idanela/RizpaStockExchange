@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class MKTSellTransaction extends MKTTransaction {
 
     @Override
-    protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock stock) {
-        List<ITransaction> sortedAndFiltered = transactionsToScan
+    protected List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock stock) {
+        List<Transaction> sortedAndFiltered = transactionsToScan
                 .stream().filter(transaction -> transaction.getStock().equals(stock))
                 .collect(Collectors.toList());
 
@@ -17,7 +17,7 @@ public class MKTSellTransaction extends MKTTransaction {
     }
 
     @Override
-    protected boolean compareTransactionPrice(ITransaction transaction) {
+    protected boolean compareTransactionPrice(Transaction transaction) {
         return this.getPriceOfStock() < transaction.getPriceOfStock();
     }
 }

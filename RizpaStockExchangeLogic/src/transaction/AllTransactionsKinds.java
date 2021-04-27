@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AllTransactionsKinds implements ITransaction{
+public abstract class AllTransactionsKinds implements Transaction {
 
 
     Stock m_Stock;
@@ -63,15 +63,15 @@ public abstract class AllTransactionsKinds implements ITransaction{
         return m_Limit * m_NumOfStocks;
     }
 
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
+    protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
 
     @Override
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd) {
+    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd) {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
-        List<ITransaction> toRemove = new ArrayList<>();
-        List<ITransaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock);
-        for(ITransaction transaction: toScanSorted) {
+        List<Transaction> toRemove = new ArrayList<>();
+        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock);
+        for(Transaction transaction: toScanSorted) {
                     if(m_NumOfStocks >= transaction.getNumOfStocks())
                         toRemove.add(transaction);
                     if (isFinished = preformTransaction(transactionsToScan, transaction ,transactionsMade))
@@ -86,7 +86,7 @@ public abstract class AllTransactionsKinds implements ITransaction{
         return transactionsMade;
     }
 
-    private void AddTransactionToList(List<ITransaction> toAdd)
+    private void AddTransactionToList(List<Transaction> toAdd)
     {
         for (int i = 0; i <toAdd.size() ; i++) {
             if(compareTransactionPrice(toAdd.get(i)))
@@ -99,10 +99,10 @@ public abstract class AllTransactionsKinds implements ITransaction{
         toAdd.add(this);
     }
 
-    protected abstract boolean compareTransactionPrice(ITransaction transaction);
+    protected abstract boolean compareTransactionPrice(Transaction transaction);
 
 
-    private boolean preformTransaction(List<ITransaction> i_transactionsToScan, ITransaction counterTransaction, List<TransactionMade> transactionsMade)
+    private boolean preformTransaction(List<Transaction> i_transactionsToScan, Transaction counterTransaction, List<TransactionMade> transactionsMade)
     {
         boolean isFinished = false;
         int numOfTransactionStocks = 0;

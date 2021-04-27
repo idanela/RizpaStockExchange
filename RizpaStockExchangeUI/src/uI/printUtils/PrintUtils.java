@@ -2,7 +2,7 @@ package uI.printUtils;
 
 import stocks.Stock;
 import transaction.TransactionMade;
-import transaction.ITransaction;
+import transaction.Transaction;
 import stockExchangeEngine.IStockEngine;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PrintUtils {
         System.out.println();
     }
 
-    private static void printTransaction(ITransaction transaction) {
+    private static void printTransaction(Transaction transaction) {
         System.out.println("Date: " + transaction.getDateOfTransaction());
         System.out.println("Amount: " + transaction.getNumOfStocks());
         System.out.println("Price: " + transaction.getPriceOfStock());
@@ -81,9 +81,9 @@ public class PrintUtils {
     {
         for (Stock stock : engine.getStocks().values())
         {
-            List<ITransaction> stockPendingBuyTransaction = getFilteredStockTransactions(engine.getPendingBuyTransactions(),stock);
-            List<ITransaction> stockPendingSellTransaction = getFilteredStockTransactions(engine.getPendingSellTransactions(),stock);
-            List<ITransaction> stockMadeTransaction = getFilteredStockTransactions(engine.getTransactionList(),stock);
+            List<Transaction> stockPendingBuyTransaction = getFilteredStockTransactions(engine.getPendingBuyTransactions(),stock);
+            List<Transaction> stockPendingSellTransaction = getFilteredStockTransactions(engine.getPendingSellTransactions(),stock);
+            List<Transaction> stockMadeTransaction = getFilteredStockTransactions(engine.getTransactionList(),stock);
             System.out.println("Stock's Symbol:"+ stock.getStockName());
             printTransactions("Transaction made List:",stockMadeTransaction);
             printTransactions("Pending Buy Transactions:",stockPendingBuyTransaction);
@@ -91,7 +91,7 @@ public class PrintUtils {
         }
     }
 
-    private static List<ITransaction> getFilteredStockTransactions(List<ITransaction> Transactions,Stock stock) {
+    private static List<Transaction> getFilteredStockTransactions(List<Transaction> Transactions, Stock stock) {
         return Transactions
                 .stream()
                 .filter(transaction -> transaction.getStock().equals(stock))
@@ -99,7 +99,7 @@ public class PrintUtils {
     }
 
 
-    private static void printTransactions(String List, List<ITransaction> transactionList)
+    private static void printTransactions(String List, List<Transaction> transactionList)
     {
         int sumOfAllTransactions = 0;
         System.out.println(List);
@@ -109,7 +109,7 @@ public class PrintUtils {
         }
         else
         {
-            for (ITransaction transaction: transactionList)
+            for (Transaction transaction: transactionList)
             {
                 printTransaction(transaction);
                 sumOfAllTransactions+=transaction.getTransactionWorth();

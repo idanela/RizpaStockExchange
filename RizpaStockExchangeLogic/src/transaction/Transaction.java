@@ -5,7 +5,7 @@ import stocks.Stock;
 import java.io.Serializable;
 import java.util.List;
 
-public interface ITransaction extends Serializable {
+public interface Transaction extends Serializable {
     Stock getStock();
 
     int getNumOfStocks();
@@ -16,7 +16,7 @@ public interface ITransaction extends Serializable {
 
     public int getTransactionWorth();
 
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan,List<ITransaction> toAdd);
+    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd);
     public void setNumOfStocks(int number);
 
 }

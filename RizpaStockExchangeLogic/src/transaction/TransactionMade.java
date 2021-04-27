@@ -5,7 +5,7 @@ import stocks.Stock;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class TransactionMade implements ITransaction
+public class TransactionMade implements Transaction
 {
     Stock m_stock;
     private String m_DateOfTransaction;
@@ -45,7 +45,7 @@ public class TransactionMade implements ITransaction
     public int getTransactionWorth() {return m_TransactionWorth;}
 
     @Override
-    public List<TransactionMade> findCounterTransaction(List<ITransaction> transactionsToScan, List<ITransaction> toAdd){
+    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd){
         return null;
     }
 

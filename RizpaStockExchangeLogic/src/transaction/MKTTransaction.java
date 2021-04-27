@@ -13,7 +13,7 @@ public abstract class MKTTransaction extends AllTransactionsKinds {
     }
 
     @Override
-    protected abstract List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock m_Stock);
-    protected abstract boolean compareTransactionPrice(ITransaction transaction);
+    protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
+    protected abstract boolean compareTransactionPrice(Transaction transaction);
 
 }

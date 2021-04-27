@@ -14,8 +14,8 @@ public class LMTBuyTransaction extends LMTTransaction {
     }
 
     @Override
-    protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock stock) {
-        List<ITransaction> sortedAndFiltered = transactionsToScan
+    protected List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock stock) {
+        List<Transaction> sortedAndFiltered = transactionsToScan
                 .stream().filter(transaction -> transaction.getStock().equals(stock))
                 .filter(transaction -> transaction.getPriceOfStock() <= m_Limit)
                 .collect(Collectors.toList());
@@ -25,7 +25,7 @@ public class LMTBuyTransaction extends LMTTransaction {
 
 
     @Override
-    protected boolean compareTransactionPrice(ITransaction transaction) {
+    protected boolean compareTransactionPrice(Transaction transaction) {
         return this.getPriceOfStock() > transaction.getPriceOfStock();
     }
 }

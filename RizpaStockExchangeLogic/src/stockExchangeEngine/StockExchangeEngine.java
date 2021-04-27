@@ -12,9 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class StockExchangeEngine implements IStockEngine
 {
     private Map<String,Stock> m_AllStocks;
-    private List<AllTransactionsKinds> m_PendingBuyTransactions;
-    private List<AllTransactionsKinds> m_PendingSellTransactions;
-    private List<Transaction> m_Transactions;
+    private List<ITransaction> m_PendingBuyTransactions;
+    private List<ITransaction> m_PendingSellTransactions;
+    private List<ITransaction> m_Transactions;
 
     public StockExchangeEngine() {
         this.m_AllStocks = null;
@@ -24,12 +24,12 @@ public class StockExchangeEngine implements IStockEngine
     }
 
     @Override
-    public List<AllTransactionsKinds> getPendingSellTransactions() {
+    public List<ITransaction> getPendingSellTransactions() {
         return m_PendingSellTransactions;
     }
 
     @Override
-    public List<AllTransactionsKinds> getPendingBuyTransactions() {
+    public List<ITransaction> getPendingBuyTransactions() {
         return m_PendingBuyTransactions;
     }
 
@@ -39,7 +39,7 @@ public class StockExchangeEngine implements IStockEngine
     }
 
     @Override
-    public List<Transaction> getTransactionList() {
+    public List<ITransaction> getTransactionList() {
         return m_Transactions;
     }
 

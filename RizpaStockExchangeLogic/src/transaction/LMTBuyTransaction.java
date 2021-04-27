@@ -1,8 +1,6 @@
 package transaction;
 
 import stocks.Stock;
-import user.User;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,17 +9,15 @@ public class LMTBuyTransaction extends LMTTransaction {
         super();
     }
 
-    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks,User initiator
-    ) {
-        super(m_Stock, m_Limit, m_NumOfStocks,initiator);
+    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
+        super(m_Stock, m_Limit, m_NumOfStocks);
     }
 
     @Override
-    protected List<AllTransactionsKinds> sortAndFilterTransaction(List<AllTransactionsKinds> transactionsToScan, Stock stock, String name) {
-        List<AllTransactionsKinds> sortedAndFiltered = transactionsToScan
+    protected List<ITransaction> sortAndFilterTransaction(List<ITransaction> transactionsToScan, Stock stock) {
+        List<ITransaction> sortedAndFiltered = transactionsToScan
                 .stream().filter(transaction -> transaction.getStock().equals(stock))
                 .filter(transaction -> transaction.getPriceOfStock() <= m_Limit)
-                .filter(transaction -> !transaction.getInitiator().equals(name))
                 .collect(Collectors.toList());
 
         return sortedAndFiltered;
@@ -29,12 +25,7 @@ public class LMTBuyTransaction extends LMTTransaction {
 
 
     @Override
-    protected boolean compareTransactionPrice(Transaction transaction) {
+    protected boolean compareTransactionPrice(ITransaction transaction) {
         return this.getPriceOfStock() > transaction.getPriceOfStock();
-    }
-
-    @Override
-    protected User getInitiator() {
-        return this.initiator;
     }
 }

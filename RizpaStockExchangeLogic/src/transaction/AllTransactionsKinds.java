@@ -1,6 +1,7 @@
 package transaction;
 
 import stocks.Stock;
+import user.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,17 +11,18 @@ import java.util.List;
 
 public abstract class AllTransactionsKinds implements Transaction {
 
-
+    User initiator;
     Stock m_Stock;
     int m_Limit;
     int m_NumOfStocks;
     String m_DateOfTransaction;
 
-    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks) {
+    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks,User initiator) {
         this.m_Stock = stock;
         this.m_Limit = limit;
         this.m_NumOfStocks = numOfStocks;
         this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
+        this.initiator = initiator;
     }
 
     public AllTransactionsKinds() {
@@ -38,6 +40,10 @@ public abstract class AllTransactionsKinds implements Transaction {
         m_NumOfStocks = number;
     }
 
+    @Override
+    public User getInitiator() {
+        return this.initiator;
+    }
     @Override
     public Stock getStock() {
         return m_Stock;

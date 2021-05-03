@@ -1,29 +1,37 @@
 package transaction;
 
 import stocks.Stock;
+import user.User;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class TransactionMade implements Transaction
 {
+    User initiator;
     Stock m_stock;
     private String m_DateOfTransaction;
     private int m_AmountOfStocks;
     private int m_PriceOfStockSelledFor;
     private int m_TransactionWorth;
 
-    public TransactionMade(Stock stock,int amountOfStocks, int priceOfStock) {
+    public TransactionMade(Stock stock,int amountOfStocks, int priceOfStock,User initiator) {
         this.m_stock = stock;
         this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.m_AmountOfStocks = amountOfStocks;
         this.m_PriceOfStockSelledFor = priceOfStock;
         this.m_TransactionWorth = amountOfStocks * priceOfStock;
+        this.initiator = initiator;
     }
 
     @Override
     public void setNumOfStocks(int number) {
         m_AmountOfStocks = number;
+    }
+
+    @Override
+    public User getInitiator() {
+        return initiator;
     }
 
     @Override

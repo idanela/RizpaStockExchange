@@ -1,6 +1,8 @@
 package transaction;
 
 import stocks.Stock;
+import user.User;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,8 +11,8 @@ public class LMTBuyTransaction extends LMTTransaction {
         super();
     }
 
-    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks) {
-        super(m_Stock, m_Limit, m_NumOfStocks);
+    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks, User initiator) {
+        super(m_Stock, m_Limit, m_NumOfStocks,initiator);
     }
 
     @Override

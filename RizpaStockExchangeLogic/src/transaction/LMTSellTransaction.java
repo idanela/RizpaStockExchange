@@ -1,14 +1,15 @@
 package transaction;
 
 import stocks.Stock;
+import user.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LMTSellTransaction extends AllTransactionsKinds{
 
-    public LMTSellTransaction(Stock stock, int limit, int numOfStocks) {
-        super(stock,limit,numOfStocks);
+    public LMTSellTransaction(Stock stock, int limit, int numOfStocks, User initiator) {
+        super(stock,limit,numOfStocks,initiator);
     }
 
     public LMTSellTransaction() {

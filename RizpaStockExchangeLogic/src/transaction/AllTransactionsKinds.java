@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AllTransactionsKinds implements Transaction {
 
@@ -28,11 +29,12 @@ public abstract class AllTransactionsKinds implements Transaction {
     public AllTransactionsKinds() {
     }
 
-    public void setProperties(Stock stock, int limit, int numOfStocks) {
+    public void setProperties(Stock stock, int limit, int numOfStocks,User user) {
         this.m_Stock = stock;
         this.m_Limit = limit;
         this.m_NumOfStocks = numOfStocks;
-        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());;
+        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
+        this.initiator = user;
     }
 
     @Override
@@ -76,7 +78,10 @@ public abstract class AllTransactionsKinds implements Transaction {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
         List<Transaction> toRemove = new ArrayList<>();
-        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock);
+        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock)
+                .stream().filter(transaction -> !transaction.getInitiator().equals(this.getInitiator()))
+                        .collect(Collectors.toList());
+        ;
         for(Transaction transaction: toScanSorted) {
                     if(m_NumOfStocks >= transaction.getNumOfStocks())
                         toRemove.add(transaction);
@@ -116,14 +121,14 @@ public abstract class AllTransactionsKinds implements Transaction {
         if(this.m_NumOfStocks >= counterTransaction.getNumOfStocks()) //More stocks in this transaction
         {
             numOfTransactionStocks = counterTransaction.getNumOfStocks();
-            newTransaction = new TransactionMade(m_Stock,numOfTransactionStocks,counterTransaction.getPriceOfStock());
+            newTransaction = new TransactionMade(m_Stock,numOfTransactionStocks,counterTransaction.getPriceOfStock(),counterTransaction.getInitiator());
             this.m_NumOfStocks =  m_NumOfStocks - numOfTransactionStocks;
            if(this instanceof MKTBuyTransaction)
                 this.m_Limit = counterTransaction.getPriceOfStock();
         }
         else
         {
-            newTransaction = new TransactionMade(m_Stock,m_NumOfStocks,counterTransaction.getPriceOfStock());
+            newTransaction = new TransactionMade(m_Stock,m_NumOfStocks,counterTransaction.getPriceOfStock(),counterTransaction.getInitiator());
             counterTransaction.setNumOfStocks(counterTransaction.getNumOfStocks() - m_NumOfStocks);
             m_NumOfStocks = 0;
         }

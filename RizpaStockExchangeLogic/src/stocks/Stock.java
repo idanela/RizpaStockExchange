@@ -7,81 +7,91 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Stock implements Serializable {
-    String m_Name;
-    String m_StockHolder;
-    int m_CurrentPrice;
-    int m_NumOfTransaction;
-    List<TransactionMade> m_Transactions;
+    String stockName;
+    String stockHolder;
+    int currentPrice;
+    int numOfTransaction;
+    int transactionsWorth;
+    List<TransactionMade> transactions;
 
 
     public Stock(RseStock stock) {
-        this.m_Name = stock.getRseSymbol();
-        this.m_StockHolder = stock.getRseCompanyName();
-        this.m_CurrentPrice = stock.getRsePrice();
-        this.m_NumOfTransaction = 0;
-        this.m_Transactions = new LinkedList<>();
+        this.stockName = stock.getRseSymbol();
+        this.stockHolder = stock.getRseCompanyName();
+        this.currentPrice = stock.getRsePrice();
+        this.numOfTransaction = 0;
+        this.transactionsWorth = 0;
+        this.transactions = new LinkedList<>();
     }
-    public Stock(String m_Name, String m_StockHolder, int m_CurrentPrice) {
-        this.m_Name = m_Name;
-        this.m_StockHolder = m_StockHolder;
-        this.m_CurrentPrice = m_CurrentPrice;
-        this.m_NumOfTransaction = 0;
-        this.m_Transactions = new LinkedList<>();
+    public Stock(String stockName, String stockHolder, int currentPrice) {
+        this.stockName = stockName;
+        this.stockHolder = stockHolder;
+        this.currentPrice = currentPrice;
+        this.numOfTransaction = 0;
+        this.transactionsWorth = 0;
+        this.transactions = new LinkedList<>();
+    }
+
+    public int getTransactionsWorth() {
+        return transactionsWorth;
     }
 
     @Override
     public String toString() {
-        return  "SYMBOL ='" + m_Name + '\'' +
-                ", StockHolder ='" + m_StockHolder + '\'' +
-                ", Price =" + m_CurrentPrice +
-                ", Number of transaction =" + m_NumOfTransaction +
-                ", m_Transactions =" + m_Transactions;
+        return  "SYMBOL ='" + stockName + '\'' +
+                ", StockHolder ='" + stockHolder + '\'' +
+                ", Price =" + currentPrice +
+                ", Number of transaction =" + numOfTransaction +'\''+
+                ", Transactions worth = "+transactionsWorth+
+                ", m_Transactions =" + transactions;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return m_Name.equals(((Stock)obj).getStockName());
+        return stockName.equals(((Stock)obj).getStockName());
     }
 
     public String getStockHolder()
     {
-        return this.m_StockHolder;
+        return this.stockHolder;
     }
     public int getCurrentPrice()
     {
-        return this.m_CurrentPrice;
+        return this.currentPrice;
     }
     public int getNumOfTransaction()
     {
-        return m_NumOfTransaction;
+        return numOfTransaction;
     }
 
     public List<TransactionMade> getTransactions() {
-        return m_Transactions;
+        return transactions;
     }
 
     public int getWorthOfTransactions()
     {
         int sum = 0;
-        for (TransactionMade transaction:m_Transactions)
+        for (TransactionMade transaction: transactions)
         {
             sum += transaction.getTransactionWorth();
         }
+
+        transactionsWorth = sum;
 
         return sum;
     }
 
     public String getStockName()
     {
-        return this.m_Name;
+        return this.stockName;
     }
 
     public void setNumOfTransaction(int m_NumOfTransaction) {
-        this.m_NumOfTransaction = m_NumOfTransaction;
+        this.numOfTransaction = m_NumOfTransaction;
     }
 
     public void addTransactionToStocksTransactionsList(TransactionMade transaction)
     {
-        m_Transactions.add(transaction);
+        transactions.add(transaction);
     }
 }

@@ -20,5 +20,6 @@ public class MKTSellTransaction extends MKTTransaction {
     protected boolean compareTransactionPrice(Transaction transaction) {
         return this.getPriceOfStock() < transaction.getPriceOfStock();
     }
+
 }
 

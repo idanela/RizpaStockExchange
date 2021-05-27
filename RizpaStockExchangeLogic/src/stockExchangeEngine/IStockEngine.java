@@ -12,10 +12,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public interface IStockEngine extends Serializable {
 
     public Map<String,Stock> getStocks();
-    public boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol);
     public List<Transaction> getTransactionList();
     public List<Transaction> getPendingSellTransactions();
     public List<Transaction> getPendingBuyTransactions();
     public void addTransactionMade(TransactionMade transactionMade);
     public void addTransactionsMade(List<TransactionMade> transactionsMade);
+    boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName, AtomicBoolean hasSameUser, AtomicBoolean hasInValidStock);
 }

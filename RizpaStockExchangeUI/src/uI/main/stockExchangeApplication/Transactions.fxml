@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uI.main.AllStockTransactionsController.AllStockTransactionsController">
+   <children>
+      <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <Accordion>
+              <panes>
+                <TitledPane animated="false" text="Transactions made:">
+                  <content>
+                    <AnchorPane>
+                           <children>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="9.0" prefHeight="433.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                       <content>
+                                          <TableView fx:id="transactionsMadeTableView" minHeight="200.0" minWidth="350.0">
+                                            <columns>
+                                              <TableColumn fx:id="transactionsMadeDateCol" prefWidth="75.0" text="Date" />
+                                              <TableColumn fx:id="transactionsMadeKindCol" prefWidth="75.0" text="Kind" />
+                                                <TableColumn fx:id="transactionsMadeAmountCol" prefWidth="75.0" text="Amount" />
+                                                <TableColumn fx:id="transactionsMadePriceCol" prefWidth="75.0" text="Price" />
+                                                <TableColumn fx:id="transactionsMadeInitiatorCol" prefWidth="75.0" text="Initiator" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </content>
+                                    </ScrollPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Pending sell transactions:">
+                  <content>
+                    <AnchorPane>
+                           <children>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="9.600000381469727" layoutY="3.5999999046325684" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                       <content>
+                                          <TableView fx:id="pendingSellTableView" minHeight="200.0" minWidth="350.0">
+                                            <columns>
+                                              <TableColumn fx:id="pendingSellDateCol" prefWidth="75.0" text="Date" />
+                                              <TableColumn fx:id="pendingSellKindCol" prefWidth="75.0" text="Kind" />
+                                                <TableColumn fx:id="pendingSellAmountCol" prefWidth="75.0" text="Amount" />
+                                                <TableColumn fx:id="pendingSellPriceCol" prefWidth="75.0" text="Price" />
+                                                <TableColumn fx:id="pendingSellInitiatorCol" prefWidth="75.0" text="Initiator" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </content>
+                                    </ScrollPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Pending buy transactions:">
+                  <content>
+                    <AnchorPane>
+                           <children>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="9.600000381469727" layoutY="-12.399999618530273" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                       <content>
+                                          <TableView fx:id="pendingBuyTableView" minHeight="200.0" minWidth="350.0">
+                                            <columns>
+                                              <TableColumn fx:id="pendingBuyDateCol" prefWidth="75.0" text="Date" />
+                                              <TableColumn fx:id="pendingBuyKindCol" prefWidth="75.0" text="Kind" />
+                                                <TableColumn fx:id="pendingBuyAmountCol" prefWidth="75.0" text="Amount" />
+                                                <TableColumn fx:id="pendingBuyPriceCol" prefWidth="75.0" text="Price" />
+                                                <TableColumn fx:id="pendingBuyInitiatorCol" prefWidth="75.0" text="Initiator" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </content>
+                                    </ScrollPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

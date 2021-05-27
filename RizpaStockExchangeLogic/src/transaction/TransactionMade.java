@@ -9,24 +9,39 @@ import java.util.*;
 public class TransactionMade implements Transaction
 {
     User initiator;
-    Stock m_stock;
-    private String m_DateOfTransaction;
-    private int m_AmountOfStocks;
-    private int m_PriceOfStockSelledFor;
-    private int m_TransactionWorth;
+    User partner;
 
-    public TransactionMade(Stock stock,int amountOfStocks, int priceOfStock,User initiator) {
-        this.m_stock = stock;
-        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
-        this.m_AmountOfStocks = amountOfStocks;
-        this.m_PriceOfStockSelledFor = priceOfStock;
-        this.m_TransactionWorth = amountOfStocks * priceOfStock;
+
+    Stock stock;
+    private String dateOfTransaction;
+    private int amountOfStocks;
+    private int priceOfStockSelledFor;
+    private int transactionWorth;
+    private String transactionKind;
+
+    @Override
+    public String getTransactionKind() {
+        return transactionKind;
+    }
+
+    public int getPriceOfStockSelledFor() {
+        return priceOfStockSelledFor;
+    }
+
+    public TransactionMade(Stock stock, int amountOfStocks, int priceOfStock, User initiator,User partner,String kind) {
+        this.stock = stock;
+        this.dateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
+        this.amountOfStocks = amountOfStocks;
+        this.priceOfStockSelledFor = priceOfStock;
+        this.transactionWorth = amountOfStocks * priceOfStock;
         this.initiator = initiator;
+        this.partner= partner;
+        this.transactionKind =kind;
     }
 
     @Override
-    public void setNumOfStocks(int number) {
-        m_AmountOfStocks = number;
+    public void setAmountOfStocks(int number) {
+        amountOfStocks = number;
     }
 
     @Override
@@ -36,34 +51,44 @@ public class TransactionMade implements Transaction
 
     @Override
     public Stock getStock() {
-        return m_stock;
+        return stock;
     }
+
+    @Override
+    public String getUserName() {
+        return initiator.getName();
+    }
+
     @Override
     public String getDateOfTransaction() {
-        return m_DateOfTransaction;
+        return dateOfTransaction;
     }
 
     @Override
-    public int getNumOfStocks() {return m_AmountOfStocks;}
+    public int getAmountOfStocks() {return amountOfStocks;}
 
     @Override
-    public int getPriceOfStock() {return m_PriceOfStockSelledFor;}
+    public int getPriceOfStock() {return priceOfStockSelledFor;}
 
     @Override
-    public int getTransactionWorth() {return m_TransactionWorth;}
+    public int getTransactionWorth() {return transactionWorth;}
 
     @Override
     public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd){
         return null;
     }
 
+    public User getPartner() {
+        return partner;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
-                "m_Date of transaction:" + m_DateOfTransaction +
-                ", Amount of stocks:" + m_AmountOfStocks +
-                ", m_PriceOfStock:" + m_PriceOfStockSelledFor +
-                ", m_TransactionWorth:" + m_TransactionWorth +
+                "m_Date of transaction:" + dateOfTransaction +
+                ", Amount of stocks:" + amountOfStocks +
+                ", m_PriceOfStock:" + priceOfStockSelledFor +
+                ", m_TransactionWorth:" + transactionWorth +
                 "}\r\n";
     }
 }

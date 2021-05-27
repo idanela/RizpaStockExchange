@@ -13,33 +13,44 @@ import java.util.stream.Collectors;
 public abstract class AllTransactionsKinds implements Transaction {
 
     User initiator;
-    Stock m_Stock;
-    int m_Limit;
-    int m_NumOfStocks;
-    String m_DateOfTransaction;
+    Stock stock;
+    int limit;
+    int amountOfStocks;
+    String dateOfTransaction;
+    String transactionKind;
 
-    public AllTransactionsKinds(Stock stock, int limit, int numOfStocks,User initiator) {
-        this.m_Stock = stock;
-        this.m_Limit = limit;
-        this.m_NumOfStocks = numOfStocks;
-        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
+    public AllTransactionsKinds(Stock stock, int limit, int amountOfStocks, User initiator, String kind) {
+        this.stock = stock;
+        this.limit = limit;
+        this.amountOfStocks = amountOfStocks;
+        this.dateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.initiator = initiator;
+        this.transactionKind = kind;
     }
 
     public AllTransactionsKinds() {
     }
 
-    public void setProperties(Stock stock, int limit, int numOfStocks,User user) {
-        this.m_Stock = stock;
-        this.m_Limit = limit;
-        this.m_NumOfStocks = numOfStocks;
-        this.m_DateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
+    public int getLimit() {
+        return limit;
+    }
+
+    public String getKind() {
+        return transactionKind;
+    }
+
+    public void setProperties(Stock stock, int limit, int numOfStocks, User user, String kind) {
+        this.stock = stock;
+        this.limit = limit;
+        this.amountOfStocks = numOfStocks;
+        this.dateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.initiator = user;
+        this.transactionKind = kind;
     }
 
     @Override
-    public void setNumOfStocks(int number) {
-        m_NumOfStocks = number;
+    public void setAmountOfStocks(int number) {
+        amountOfStocks = number;
     }
 
     @Override
@@ -48,27 +59,37 @@ public abstract class AllTransactionsKinds implements Transaction {
     }
     @Override
     public Stock getStock() {
-        return m_Stock;
+        return stock;
     }
 
     @Override
-    public int getNumOfStocks() {
-        return m_NumOfStocks;
+    public int getAmountOfStocks() {
+        return amountOfStocks;
     }
 
     @Override
     public String getDateOfTransaction() {
-        return m_DateOfTransaction;
+        return dateOfTransaction;
     }
 
     @Override
     public int getPriceOfStock() {
-        return m_Limit;
+        return limit;
     }
 
     @Override
     public int getTransactionWorth() {
-        return m_Limit * m_NumOfStocks;
+        return limit * amountOfStocks;
+    }
+
+    @Override
+    public String getUserName() {
+        return initiator.getName();
+    }
+
+    @Override
+    public String getTransactionKind() {
+        return transactionKind;
     }
 
     protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
@@ -78,12 +99,12 @@ public abstract class AllTransactionsKinds implements Transaction {
         boolean isFinished = false;
         List<TransactionMade> transactionsMade = new LinkedList<>();
         List<Transaction> toRemove = new ArrayList<>();
-        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan,m_Stock)
+        List<Transaction> toScanSorted = sortAndFilterTransaction(transactionsToScan, stock)
                 .stream().filter(transaction -> !transaction.getInitiator().equals(this.getInitiator()))
                         .collect(Collectors.toList());
         ;
         for(Transaction transaction: toScanSorted) {
-                    if(m_NumOfStocks >= transaction.getNumOfStocks())
+                    if(amountOfStocks >= transaction.getAmountOfStocks())
                         toRemove.add(transaction);
                     if (isFinished = preformTransaction(transactionsToScan, transaction ,transactionsMade))
                         break;
@@ -113,36 +134,33 @@ public abstract class AllTransactionsKinds implements Transaction {
     protected abstract boolean compareTransactionPrice(Transaction transaction);
 
 
-    private boolean preformTransaction(List<Transaction> i_transactionsToScan, Transaction counterTransaction, List<TransactionMade> transactionsMade)
+    private boolean preformTransaction(List<Transaction> transactionsToScan, Transaction counterTransaction, List<TransactionMade> transactionsMade)
     {
         boolean isFinished = false;
         int numOfTransactionStocks = 0;
         TransactionMade newTransaction;
-        if(this.m_NumOfStocks >= counterTransaction.getNumOfStocks()) //More stocks in this transaction
+        if(this.amountOfStocks >= counterTransaction.getAmountOfStocks()) //More stocks in this transaction
         {
-            numOfTransactionStocks = counterTransaction.getNumOfStocks();
-            newTransaction = new TransactionMade(m_Stock,numOfTransactionStocks,counterTransaction.getPriceOfStock(),counterTransaction.getInitiator());
-            this.m_NumOfStocks =  m_NumOfStocks - numOfTransactionStocks;
+            numOfTransactionStocks = counterTransaction.getAmountOfStocks();
+            newTransaction = new TransactionMade(stock,numOfTransactionStocks,counterTransaction.getPriceOfStock(),initiator,counterTransaction.getInitiator(), transactionKind);
+            this.amountOfStocks =  amountOfStocks - numOfTransactionStocks;
            if(this instanceof MKTBuyTransaction)
-                this.m_Limit = counterTransaction.getPriceOfStock();
+                this.limit = counterTransaction.getPriceOfStock();
         }
         else
         {
-            newTransaction = new TransactionMade(m_Stock,m_NumOfStocks,counterTransaction.getPriceOfStock(),counterTransaction.getInitiator());
-            counterTransaction.setNumOfStocks(counterTransaction.getNumOfStocks() - m_NumOfStocks);
-            m_NumOfStocks = 0;
+            newTransaction = new TransactionMade(stock, amountOfStocks,counterTransaction.getPriceOfStock(),initiator,counterTransaction.getInitiator(), transactionKind);
+            counterTransaction.setAmountOfStocks(counterTransaction.getAmountOfStocks() - amountOfStocks);
+            amountOfStocks = 0;
         }
         transactionsMade.add(newTransaction);
-        this.m_Stock.addTransactionToStocksTransactionsList(newTransaction);
+        this.stock.addTransactionToStocksTransactionsList(newTransaction);
 
         if(this instanceof MKTTransaction)
-            this.m_Limit = newTransaction.getPriceOfStock();
-        if(m_NumOfStocks == 0)
+            this.limit = newTransaction.getPriceOfStock();
+        if(amountOfStocks == 0)
             isFinished = true;
 
         return isFinished;
     }
-
-
-
 }

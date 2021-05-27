@@ -20,6 +20,10 @@ public class StockExchangeEngine implements IStockEngine
     private List<Transaction> m_PendingSellTransactions;
     private List<Transaction> m_Transactions;
 
+    public Map<String, User> getUsers() {
+        return users;
+    }
+
     public StockExchangeEngine() {
         this.users =null;
         this.m_AllStocks = null;
@@ -43,10 +47,24 @@ public class StockExchangeEngine implements IStockEngine
         return this.m_AllStocks;
     }
 
+    public Stock getStock(String symbol)
+    {
+        Stock returnedStock = null;
+        for (Stock stock : m_AllStocks.values()) {
+            if(stock.getStockName().equals(symbol))
+            {
+                returnedStock =stock;
+                break;
+            }
+        }
+            return returnedStock;
+    }
+
     @Override
     public List<Transaction> getTransactionList() {
         return m_Transactions;
     }
+
 
     @Override
     public void addTransactionsMade(List<TransactionMade> transactionsMade) {
@@ -64,9 +82,9 @@ public class StockExchangeEngine implements IStockEngine
     }
 
     @Override
-    public boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName) {
+    public boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName,AtomicBoolean hasSameUser,AtomicBoolean hasInValidStock) {
         boolean xmlContentLoaded = true;
-        RizpaStockExchangeDescriptor descriptor = XmlRizpaDataExtractor.getStocks(path,hasSameCompany,hasSameName);
+        RizpaStockExchangeDescriptor descriptor = XmlRizpaDataExtractor.getStocks(path,hasSameCompany,hasSameName,hasSameUser,hasInValidStock);
         if(descriptor == null)
         {
             xmlContentLoaded = false;
@@ -92,7 +110,7 @@ public class StockExchangeEngine implements IStockEngine
        users = new HashMap<>();
        for (RseUser user :generatedUsers)
        {
-           this.users.put(user.getName(),new User(user));
+           this.users.put(user.getName(),new User(user,this));
        }
 
     }

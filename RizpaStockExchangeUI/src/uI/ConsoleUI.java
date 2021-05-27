@@ -209,7 +209,7 @@ public class ConsoleUI implements IUI
             m_BuyOrderMenu.Run(true);
             if(!(m_TransactionToUse instanceof MKTTransaction))
                 limit = getLimit();
-                m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
+              //  m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
             buyStocks(m_TransactionToUse);
         }
         else
@@ -217,7 +217,7 @@ public class ConsoleUI implements IUI
             m_SellOrderMenu.Run(true);
             if(!(m_TransactionToUse instanceof MKTTransaction))
                 limit = getLimit();
-            m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
+           //m_TransactionToUse.setProperties(stock,limit,amountForTransaction);
             sellStocks(m_TransactionToUse);
         }
     }
@@ -243,7 +243,7 @@ public class ConsoleUI implements IUI
     }
 
     private void buyStocks(Transaction transaction) {
-        int amount = m_TransactionToUse.getNumOfStocks();
+        int amount = m_TransactionToUse.getAmountOfStocks();
         if(m_Facade.isStockExists(transaction.getStock().getStockName()))
         {
             List<TransactionMade> transactionsMade = m_Facade.buyStocks(m_TransactionToUse);
@@ -256,7 +256,7 @@ public class ConsoleUI implements IUI
     }
 
     private void sellStocks(Transaction transaction) {
-        int amount = m_TransactionToUse.getNumOfStocks();
+        int amount = m_TransactionToUse.getAmountOfStocks();
         if(m_Facade.isStockExists(transaction.getStock().getStockName())) {
             List<TransactionMade> transactions = m_Facade.sellStocks(m_TransactionToUse);
             PrintUtils.printDetailsAboutTransactionsMade(transactions, amount);

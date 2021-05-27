@@ -11,15 +11,15 @@ public class LMTBuyTransaction extends LMTTransaction {
         super();
     }
 
-    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks, User initiator) {
-        super(m_Stock, m_Limit, m_NumOfStocks,initiator);
+    public LMTBuyTransaction(Stock m_Stock, int m_Limit, int m_NumOfStocks, User initiator,String kind) {
+        super(m_Stock, m_Limit, m_NumOfStocks,initiator,kind);
     }
 
     @Override
     protected List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock stock) {
         List<Transaction> sortedAndFiltered = transactionsToScan
                 .stream().filter(transaction -> transaction.getStock().equals(stock))
-                .filter(transaction -> transaction.getPriceOfStock() <= m_Limit)
+                .filter(transaction -> transaction.getPriceOfStock() <= limit)
                 .collect(Collectors.toList());
 
         return sortedAndFiltered;

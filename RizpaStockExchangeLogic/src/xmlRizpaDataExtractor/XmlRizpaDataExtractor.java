@@ -1,7 +1,6 @@
 package xmlRizpaDataExtractor;
 
-import generated.RizpaStockExchangeDescriptor;
-import generated.RseStock;
+import generated.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,7 +15,7 @@ public class XmlRizpaDataExtractor {
 
     public static final String packageToReadFrom = "generated";
 
-   public static  RizpaStockExchangeDescriptor getStocks(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName)
+   public static  RizpaStockExchangeDescriptor getStocks(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName,AtomicBoolean hasSameUser,AtomicBoolean hasInValidStock)
    {
        RizpaStockExchangeDescriptor stocksDescriptor = null;
        try
@@ -28,7 +27,7 @@ public class XmlRizpaDataExtractor {
            e.printStackTrace();
        }
 
-       if(!checkIfContentIsValid(stocksDescriptor,hasSameCompany,hasSameName))
+       if(!checkIfContentIsValid(stocksDescriptor,hasSameCompany,hasSameName,hasSameUser,hasInValidStock))
        {
            stocksDescriptor = null;
        }
@@ -43,11 +42,14 @@ public class XmlRizpaDataExtractor {
        return (RizpaStockExchangeDescriptor)um.unmarshal(inputStream);
    }
 
-   public static boolean checkIfContentIsValid(RizpaStockExchangeDescriptor rsed, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName)
+   public static boolean checkIfContentIsValid(RizpaStockExchangeDescriptor rsed, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName,AtomicBoolean hasSameUser,AtomicBoolean hasInValidStock)
    {   Map<String,String> companyNames = new HashMap<>();
        Map<String,RseStock> mapStocks = new HashMap<>();
+       Map<String,RseUser> mapUsers = new HashMap<>();
        List<RseStock> stocks = rsed.getRseStocks().getRseStock();
+       List<RseUser> users =rsed.getRseUsers().getRseUser();
        boolean isValidFormat = true;
+        boolean hasStock = false;
        for (RseStock stock:stocks)
        {
             if(mapStocks.containsKey(stock.getRseSymbol()))
@@ -57,8 +59,20 @@ public class XmlRizpaDataExtractor {
             mapStocks.put(stock.getRseSymbol(),stock);
             companyNames.put(stock.getRseCompanyName(),stock.getRseCompanyName());
        }
-       isValidFormat = !hasSameName.get() && !hasSameCompany.get();
+       for(RseUser user:users)
+       {
+           if(mapUsers.containsKey(user.getName()))
+               hasSameUser.compareAndSet(false,true);
+           mapUsers.put(user.getName(),user);
 
-       return isValidFormat;
-   }
+           for(RseItem Item: user.getRseHoldings().getRseItem())
+           {
+               if(!mapStocks.containsKey(Item.getSymbol()))
+               hasInValidStock.compareAndSet(false,true);
+           }
+       }
+          isValidFormat = !hasSameName.get() && !hasSameCompany.get() && !hasSameUser.get()&& !hasInValidStock.get();
+
+            return isValidFormat;
+        }
 }

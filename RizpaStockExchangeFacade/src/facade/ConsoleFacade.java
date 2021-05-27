@@ -1,5 +1,6 @@
 package facade;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import stockExchangeEngine.IStockEngine;
 import stockExchangeEngine.StockExchangeEngine;
 import stocks.Stock;
@@ -24,7 +25,9 @@ public class  ConsoleFacade implements IFacade {
 
     @Override
     public boolean loadStocksData(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameSymbol) {
-        return m_Engine.getXmlContent(path,hasSameCompany,hasSameSymbol);
+      //  return m_Engine.getXmlContent(path,hasSameCompany,hasSameSymbol);
+        return true; //!@@#!@#!@#!@#
+       // TODO:handle;
     }
 
     @Override

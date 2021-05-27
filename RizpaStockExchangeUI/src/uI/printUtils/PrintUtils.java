@@ -40,7 +40,7 @@ public class PrintUtils {
 
     private static void printTransaction(Transaction transaction) {
         System.out.println("Date: " + transaction.getDateOfTransaction());
-        System.out.println("Amount: " + transaction.getNumOfStocks());
+        System.out.println("Amount: " + transaction.getAmountOfStocks());
         System.out.println("Price: " + transaction.getPriceOfStock());
         System.out.println("Total worth: " + transaction.getTransactionWorth() + System.lineSeparator());
     }
@@ -58,7 +58,7 @@ public class PrintUtils {
 
         int amountPurchase = 0;
         for (TransactionMade transaction : transactionsMade) {
-            amountPurchase += transaction.getNumOfStocks();
+            amountPurchase += transaction.getAmountOfStocks();
         }
         if (amount == amountPurchase) {
             System.out.println("Transaction completed fully." + System.lineSeparator());
@@ -71,7 +71,7 @@ public class PrintUtils {
     private static void printTransactionsMade(List<TransactionMade> transactionsMade) {
         for (TransactionMade transaction : transactionsMade) {
             System.out.println("Date: " + transaction.getDateOfTransaction());
-            System.out.println("Amount: " + transaction.getNumOfStocks());
+            System.out.println("Amount: " + transaction.getAmountOfStocks());
             System.out.println("Price: " + transaction.getPriceOfStock());
             System.out.println("Total worth: " + transaction.getTransactionWorth() + System.lineSeparator());
         }

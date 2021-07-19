@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rizpa Stock Exchange</title>
+    <link rel="stylesheet" href="http://localhost:8080/pages/stockPage/stockPage.css">
+    <link rel="stylesheet" href="../../common/bootstrap.min.css">
+    <script src="../../common/jquery-2.0.3.min.js"></script>
+    <script src="stockPage.js"></script>
+</head>
+<body>
+<div id="stockRawDetails">
+    <h2 id="symbol"></h2>
+    <h2 id="company"></h2>
+    <h2 id="currentPrice"></h2>
+    <h2 id="sumOfTransactions"></h2>
+    <h2 id="numOfStocks"></h2>
+    <a href="http://localhost:8080/pages/UsersAndStocks/usersAndStocks.html"><h1 id="goBack" >Go Back</h1></a>
+</div>
+<div id ="userNameDiv"></div>
+<div id="preformTransactionDiv">
+    <h2>Preform transaction:</h2>
+    <form id="preformTransaction" method="Post" action="/preformTransaction">
+        <label>type of action:</label><br>
+        <input type="radio" name="typeOfAction"  id ="buy" value="Buy" class="typeOfAction" checked="true"/>
+        <label for="buy">Buy</label>
+        <input type="radio" name="typeOfAction"  id ="sell" class="typeOfAction" value="Sell"/>
+        <label for="sell">Sell</label><br>
+
+        <label>Instruction type:</label><br>
+        <input type="radio" name="instruction"  id ="lmt" value="LMT" checked="true"  class="radioInstruction"/>
+        <label for="lmt">LMT</label>
+        <input type="radio" name="instruction"  id ="mkt" value="MKT"  class="radioInstruction"/>
+        <label for="mkt">MKT</label>
+        <input type="radio" name="instruction"  id ="fok" value="FOK"  class="radioInstruction"/>
+        <label for="fok">FOK</label>
+        <input type="radio" name="instruction"  id ="ioc" value="IOC" class="radioInstruction" />
+        <label for="ioc">IOC</label><br>
+        <label for="limit" id="limitLabel">Limit:</label>
+        <input type="text" name="limit" id="limit" class="blackText"><br>
+        <label for="amountOfStocks">Amount:</label>
+        <input type="text" name="amount"  id="amountOfStocks" class="blackText"/><br>
+        <input type="submit" value="preform transaction" id="preformTransactionButton" class="blackText" disabled="disabled"/>
+    </form>
+</div>
+
+<div>
+    <h4  id="limitError" class="err"> </h4>
+    <h4  id="amountError" class="err"> </h4>
+</div>
+<div>
+<table class="table" id="stockTransactionsTable">
+   <thead>
+    <tr>
+        <th class="tableHeadline" colspan="3">
+            Stock's Transactions
+        </th>
+    </tr>
+    <tr>
+        <th>Date</th>
+        <th id="amountTh">Amount</th>
+        <th>Price</th>
+    </tr>
+   </thead>
+    <tbody id ="stockTransactionBody">
+
+    </tbody>
+</table>
+
+
+<table class="table" id="transactionTable">
+   <thead>
+    <tr>
+        <th class="tableHeadline" colspan="5">
+            Notification table
+        </th>
+    </tr>
+    <tr>
+        <th>Instruction</th>
+        <th>Kind</th>
+        <th>Symbol</th>
+        <th>Amount</th>
+        <th>Price</th>
+    </tr>
+   </thead>
+    <tbody id="notBody">
+    </tbody>
+</table>
+
+<button id="myBtn">Open Modal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Transaction information</h2>
+        </div>
+        <div class="modal-body" style="-webkit-text-fill-color: #000000">
+            <p>Some text in the Modal Body</p>
+            <p>Some other text...</p>
+        </div>
+        <div class="modal-footer">
+            <h3></h3>
+        </div>
+    </div>
+
+</body></html>
+</html>

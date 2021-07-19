@@ -13,6 +13,12 @@ public abstract class MKTTransaction extends AllTransactionsKinds {
     public MKTTransaction() {
     }
 
+
+    @Override
+    public User getPartner() {
+        return null;
+    }
+
     @Override
     protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
     protected abstract boolean compareTransactionPrice(Transaction transaction);
@@ -20,5 +26,10 @@ public abstract class MKTTransaction extends AllTransactionsKinds {
     @Override
     public String getTransactionKind() {
         return "MKT";
+    }
+
+    @Override
+    public User getBuyer() {
+        return null;
     }
 }

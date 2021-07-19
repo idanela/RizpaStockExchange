@@ -1,0 +1,44 @@
+.table-column
+{
+    -fx-alignment: CENTER;
+}
+.label
+{
+    -fx-font-style: italic;
+    -fx-font-size: 18px;
+    -fx-underline: true;
+}
+
+.radio-button .text
+{
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+}
+.spinner .text-field
+{
+    -fx-font-style: italic;
+}
+
+.button .text {
+    -fx-font-style: italic;
+}
+.accordion
+{
+    -fx-background-image: url(/ui/main/stockExchangeApplication/100s.jpg);
+}
+.titled-pane .title
+{
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #7e7777;
+}
+.titled-pane
+{
+    -fx-border-width: 0px;
+}
+
+.error-label
+{
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+}

@@ -17,5 +17,5 @@ public interface IStockEngine extends Serializable {
     public List<Transaction> getPendingBuyTransactions();
     public void addTransactionMade(TransactionMade transactionMade);
     public void addTransactionsMade(List<TransactionMade> transactionsMade);
-    boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName, AtomicBoolean hasSameUser, AtomicBoolean hasInValidStock);
+    boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName, AtomicBoolean hasInValidStock);
 }

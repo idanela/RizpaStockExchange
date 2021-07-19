@@ -1,0 +1,41 @@
+
+body{
+    background: url("money.jpg") no-repeat ;
+    background-size: cover;
+    -webkit-text-fill-color: white;
+    background-attachment: fixed;
+    height: fit-content;
+}
+#loginForm
+{
+    text-align: center;
+    -webkit-text-fill-color: black;
+}
+#welcome
+{
+    margin-top: 70px;
+    font-size: 26px;
+    font-family:  "Arial Black" ;
+    -webkit-text-fill-color: #FFFFFF;
+    text-align: center;
+}
+h2
+{
+    text-align: center;
+}
+#error-placeholder
+{
+    -webkit-text-fill-color:#C83534;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    background:none;
+
+}
+
+#userKindDiv
+{
+  overflow: hidden;
+  position: relative;
+    left: -18px;
+}

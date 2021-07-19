@@ -1,0 +1,257 @@
+body{
+font-family: Arial, Helvetica, sans-serif;
+background: url("http://localhost:8080/pages/index/money.jpg") no-repeat;
+background-size: cover;
+-webkit-text-fill-color: white;
+background-attachment: fixed;
+    height: fit-content !important;
+
+}
+
+#limit
+{
+    position: relative;
+    left:19px;
+    height: fit-content !important;
+
+}
+
+.table tr:nth-child(even){background-color: black}
+.table tr:nth-child(odd){background-color: grey}
+
+
+.table th {
+    background-color: #04AA6D;
+    color: white;
+    text-align: center;
+}
+.tableHeadline
+{
+    font-weight: bold;
+    font-size: 20px;
+    width: fit-content !important;
+}
+
+.err
+{
+    -webkit-text-fill-color: red;
+    position: relative;
+    top:-105px;
+    width: fit-content;
+    height: fit-content;
+    display: list-item;
+}
+#stockTransactionsTable
+{
+    display: inline-table;
+    position: relative;
+    left:380px;
+    top:-500px;
+    width:350px !important;
+    max-width: 350px !important;
+}
+th{
+    text-align: center;
+}
+tr{
+    text-align: left;
+}
+#transactionTable
+{
+    display: inline-table;
+    position: relative;
+    left:450px;
+    top:-500px;
+    border-collapse: collapse;
+    width:450px !important;
+    max-width: 450px !important;
+    height: fit-content !important;
+
+}
+#stockRawDetails h2
+{
+    padding-left: 5px;
+}
+.blackText
+{
+    -webkit-text-fill-color: black;
+}
+
+
+#preformTransactionDiv
+{
+    position: relative;
+    top:-100px;
+    top:-100px;
+    left: 10px;
+    width:fit-content;
+    height: fit-content !important;
+}
+
+#goBack
+{
+    -webkit-text-fill-color: #2e6da4;
+    display: inline-block;
+    width: fit-content !important;
+    height: fit-content !important;
+    position: relative;
+    left:1000px;
+    top:-250px;
+}
+
+#goBack:hover
+{
+    text-decoration: underline;
+}
+.tableHeadline
+{
+    font-weight: bold;
+    font-size: 20px;
+    width: fit-content !important;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    -webkit-animation-name: fadeIn; /* Fade in the background */
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+
+}
+
+/* Modal Content */
+.modal-content {
+    position: fixed;
+    bottom: 0;
+    background-color: #fefefe;
+    width: 100%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s;
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+#myBtn
+{
+    display: none;
+}
+
+#stockRawDetails
+{
+    max-width: 320px!important;
+}
+
+#userNameDiv
+{
+    position: relative;
+    left: 950px;
+    top:-200px;
+    width: fit-content;
+    font-size: 24px;
+}
+.table tbody,
+.table thead {
+    display: inline-block;
+}
+.table thead tr{
+    width: 550px !important;
+}
+
+
+
+.table thead th {
+    height: 30px;
+    line-height: 30px;
+    width:1000px;
+    text-align: left;
+}
+
+.table tbody {
+    height: 185px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#stockTransactionBody td{
+    width: 230px;
+    text-align: left!important;
+    height: fit-content !important;
+
+}
+#notBody td
+{
+    width: 230px;
+    text-align: center!important;
+}
+.table tr:first-child th
+{
+    text-align: center;
+}
+
+#priceTd
+{
+  text-align: right !important;
+}
+
+#amountTh{
+   text-align: center;
+}

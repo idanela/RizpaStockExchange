@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rizpa Stock Exchange</title>
+    <link rel="stylesheet" href="http://localhost:8080/pages/stockPageAdmin/stockPageAdmin.css">
+    <link rel="stylesheet" href="../../common/bootstrap.min.css">
+    <script src="../../common/jquery-2.0.3.min.js"></script>
+    <script src="stockPageAdmin.js"></script>
+</head>
+<body>
+<div id="stockRawDetails">
+    <h2 id="symbol"></h2>
+    <h2 id="company"></h2>
+    <h2 id="currentPrice"></h2>
+    <h2 id="sumOfTransactions"></h2>
+    <h2 id="numOfStocks"></h2>
+    <a href="http://localhost:8080/pages/usersAndStocksAdmin/usersAndStocksAdmin.html"><h1 id="goBack" >Go Back</h1></a>
+</div>
+<div id ="userNameDiv">hiii</div>
+<table class="table" id="stockTransactionsTable">
+    <thead>
+    <tr>
+        <th class="tableHeadline" colspan="3">
+            Stock's Transactions
+        </th>
+    </tr>
+    <tr>
+        <th>Date</th>
+        <th id="amountTh">Amount</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody id="bod">
+    </tbody>
+</table>
+
+
+<table class="table" id="pendingTransactionsTable">
+    <thead>
+    <tr>
+        <th class="tableHeadline" colspan="6">
+            Pending Transactions
+        </th>
+    </tr>
+    <tr>
+        <th>Instruction</th>
+        <th id="kindTh">Kind</th>
+        <th>Symbol</th>
+        <th>Amount</th>
+        <th>Price</th>
+        <th>Initiator</th>
+    </tr>
+    </thead>
+    <tbody id="pendingBod">
+    </tbody>
+</table>
+
+</body>
+</html>

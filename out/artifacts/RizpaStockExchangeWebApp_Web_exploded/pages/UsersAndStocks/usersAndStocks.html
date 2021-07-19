@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rizpa Stock Exchange</title>
+    <link rel="stylesheet" href="http://localhost:8080/pages/UsersAndStocks/usersAndStocks.css">
+    <link rel="stylesheet" href="../../common/bootstrap.min.css">
+    <script src="../../common/jquery-2.0.3.min.js"></script>
+    <script src="usersAndStocks.js"></script>
+</head>
+
+<body>
+<h1 id="welcome"></h1>
+<h2>Let's make some money!</h2>
+<h3 id="online">Online:</h3>
+<ul id="userslist">
+</ul>
+
+<form  id="upload" action="/uploadFile" enctype="multipart/form-data" method="POST">
+    <label style="-webkit-text-fill-color: white">Choose file to upload stocks:</label>
+    <input type="file" name="file1"  accept=".xml"><br>
+    <input type="Submit" value="Upload File"><br>
+</form>
+<div class="topnav">
+   <h1></h1>
+</div>
+<div id="balanceDiv"> </div>
+<div id="loadMoney">
+    <form id="loadMoneyForm" method="Post" action="/balance">
+        <label style="-webkit-text-fill-color: white" for="sumOfMoney">Add money to account:</label>
+        <input type="text" name="amount"  id ="sumOfMoney"/>
+        <input type="submit" value="load money" disabled="disabled" id="loadMoneyButton"/>
+    </form>
+</div>
+
+<div id="createNewStockDiv">
+    <h2>Insert New Stock:</h2>
+    <form id="NewStock" method="Post" action="/createNewStock">
+        <label for="stockCompanyName">Company Name:</label><br>
+        <input type="text" name="companyName"  id ="stockCompanyName"/><br>
+        <label for="stockSymbol">Symbol:</label><br>
+        <input type="text" name="symbol"  id ="stockSymbol"/><br>
+        <label for="amountOfStocks">Amount:</label><br>
+        <input type="text" name="amount"  id ="amountOfStocks"/><br>
+        <label for="companyWorth">Company's Worth:</label><br>
+        <input type="text" name="worth"  id ="companyWorth"/><br>
+        <input type="submit" value="create Stock" id="createStockButton" disabled="disabled"/>
+    </form>
+</div>
+<div><h4 id="loadMoneyErr"></h4></div>
+<div><h4 id="amountErr" class="has-error"></h4></div>
+<div><h4 id="worthErr" class="has-error"></h4></div>
+<div id="inValidFileErrorDiv"><h4 id="inValidFileError"></h4></div>
+
+<table class="table" id="allStocksTable">
+    <tr>
+        <th class="tableHeadline" colspan="4">
+            Stocks in system
+        </th>
+    </tr>
+    <tr>
+        <th>Company</th>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>sum of transactions</th>
+    </tr>
+
+</table>
+
+<table class="table" id="accountMovementsTable">
+    <tr>
+        <th class="tableHeadline" colspan="6">
+            Account movements
+        </th>
+    </tr>
+    <tr id="firstRow">
+        <th>Kind</th>
+        <th>Symbol</th>
+        <th id="dateTh">Date</th>
+        <th>Sum</th>
+        <th>Balance before</th>
+        <th>Balance after</th>
+    </tr>
+</table>
+
+<button id="myBtn">Open Modal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Notifications</h2>
+        </div>
+        <div class="modal-body" style="-webkit-text-fill-color: #000000" id="modal-body">
+        </div>
+        <div class="modal-footer">
+            <h3></h3>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -5,13 +5,15 @@ import stocks.Stock;
 public class Holding {
     Stock stock;
     int amountOfStocks;
+    int amountFreeToUse;
     int price;
     int totalWorthOfStocks;
 
     public Holding(Stock stock, int amountOfStocks) {
         this.stock = stock;
         this.amountOfStocks = amountOfStocks;
-        this.price =stock.getCurrentPrice();
+        amountFreeToUse = amountOfStocks;
+        this.price = stock.getCurrentPrice();
         this.totalWorthOfStocks = stock.getCurrentPrice()*amountOfStocks;
     }
 
@@ -19,11 +21,24 @@ public class Holding {
         return price;
     }
 
+    public int getAmountFreeToUse() {
+        return amountFreeToUse;
+    }
+
+    public void setAmountFreeToUse(int amountFreeToUse) {
+        this.amountFreeToUse = amountFreeToUse;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public Holding(Stock stock, int amountOfStocks, int price)
     {
         this.stock = stock;
         this.amountOfStocks = amountOfStocks;
         this.price = price;
+        this.amountFreeToUse = amountOfStocks;
         this.totalWorthOfStocks = price * amountOfStocks;
     }
 

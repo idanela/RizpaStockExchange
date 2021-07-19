@@ -10,7 +10,8 @@ public class TransactionMade implements Transaction
 {
     User initiator;
     User partner;
-
+    User buyer;
+    User seller;
 
     Stock stock;
     private String dateOfTransaction;
@@ -18,6 +19,7 @@ public class TransactionMade implements Transaction
     private int priceOfStockSelledFor;
     private int transactionWorth;
     private String transactionKind;
+
 
     @Override
     public String getTransactionKind() {
@@ -28,7 +30,7 @@ public class TransactionMade implements Transaction
         return priceOfStockSelledFor;
     }
 
-    public TransactionMade(Stock stock, int amountOfStocks, int priceOfStock, User initiator,User partner,String kind) {
+    public TransactionMade(Stock stock, int amountOfStocks, int priceOfStock, User initiator,User partner,String kind,boolean isBuyOperation) {
         this.stock = stock;
         this.dateOfTransaction = new SimpleDateFormat("HH:mm:ss:SSS").format(new Date());
         this.amountOfStocks = amountOfStocks;
@@ -37,11 +39,21 @@ public class TransactionMade implements Transaction
         this.initiator = initiator;
         this.partner= partner;
         this.transactionKind =kind;
+        this.buyer =  isBuyOperation ?initiator:partner;
+        this.seller = isBuyOperation ? partner:initiator;
     }
 
     @Override
     public void setAmountOfStocks(int number) {
         amountOfStocks = number;
+    }
+
+    @Override
+    public User getBuyer() {
+        return buyer;
+    }
+    public User getSeller() {
+        return seller;
     }
 
     @Override
@@ -57,6 +69,10 @@ public class TransactionMade implements Transaction
     @Override
     public String getUserName() {
         return initiator.getName();
+    }
+   public String getPartnerName()
+    {
+        return partner.getName();
     }
 
     @Override
@@ -74,13 +90,15 @@ public class TransactionMade implements Transaction
     public int getTransactionWorth() {return transactionWorth;}
 
     @Override
-    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd){
+    public List<TransactionMade> findCounterTransaction(List<Transaction> transactionsToScan, List<Transaction> toAdd,boolean isBuyOperation){
         return null;
     }
 
+    @Override
     public User getPartner() {
-        return partner;
+        return this.partner;
     }
+
 
     @Override
     public String toString() {
@@ -91,4 +109,23 @@ public class TransactionMade implements Transaction
                 ", m_TransactionWorth:" + transactionWorth +
                 "}\r\n";
     }
+
+    public void setBuyer(User buyer) {
+        this.buyer = buyer;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
+    public String getBuyerName()
+    {
+        return buyer.getName();
+    }
+
+    public String getSellerName()
+    {
+        return seller.getName();
+    }
+
 }

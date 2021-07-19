@@ -1,0 +1,21 @@
+package stockExchangeEngine;
+
+import stocks.Stock;
+import transaction.Transaction;
+import transaction.TransactionMade;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public interface IStockEngine extends Serializable {
+
+    public Map<String,Stock> getStocks();
+    public List<Transaction> getTransactionList();
+    public List<Transaction> getPendingSellTransactions();
+    public List<Transaction> getPendingBuyTransactions();
+    public void addTransactionMade(TransactionMade transactionMade);
+    public void addTransactionsMade(List<TransactionMade> transactionsMade);
+    boolean getXmlContent(String path, AtomicBoolean hasSameCompany, AtomicBoolean hasSameName, AtomicBoolean hasSameUser, AtomicBoolean hasInValidStock);
+}

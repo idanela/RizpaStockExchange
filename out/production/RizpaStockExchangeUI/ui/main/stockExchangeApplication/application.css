@@ -1,0 +1,94 @@
+#headline
+{
+    -fx-font-size: 26px;
+    -fx-font-family:  "Arial Black" ;
+    -fx-text-fill:#818181 ;
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7),6,0,0,0.2);
+}
+.Load-button {
+    -fx-padding: 1px;
+    -fx-font-family: David;
+    -fx-font-size: 18px;
+    -fx-border-color: #585353;
+}
+
+.Load-button:hover
+{
+   -fx-effect: dropshadow(gaussian, rgba(162,162,162,0.5), 6,0,2,2);
+}
+
+.combo-box:hover
+{
+-fx-border-color:#007ACC ;
+}
+
+.combo-box
+{
+ -fx-background-color:#FFFFFF;
+    -fx-border-color: gray;
+}
+
+.grid
+{
+    -fx-background-color: #dddddd;
+    -fx-border-color: #dddddd;
+}
+.tab-pane
+{
+    -fx-border-color: #dddddd;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-radius: 10;
+}
+
+.combo-box .arrow-button
+{
+-fx-border-color: #bebebe;
+}
+
+.File-label{
+    -fx-font-size: 16px;
+-fx-font-family: David;
+}
+
+.stock-label
+{
+    -fx-font-size:16px ;
+    -fx-font-style: italic;
+
+}
+
+.titled-pane .title .text
+{
+    -fx-font-family: David;
+    -fx-font-size: 17px;
+}
+
+.titled-pane
+{
+    -fx-border-color: #807f7f;
+    -fx-background-image: url(100s.jpg);
+
+}
+
+.tab:selected:top
+{
+    -fx-font-weight: Bold;
+}
+
+.combo-box .list-view
+{
+    -fx-font-style: italic ;
+    -fx-font-size:16px ;
+}
+
+.table-column .label .text{
+    -fx-underline: true;
+    -fx-font-family: Arial;
+}
+
+.table-row-cell {
+    -fx-font-family:Arial;
+}
+

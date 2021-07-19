@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Rizpa Stock Exchange</title>
+
+    <!-- Link the Bootstrap (from twitter) CSS framework in order to use its classes-->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../common/bootstrap.min.css">
+    <script src="../common/jquery-2.0.3.min.js"></script>
+    <script src=" "></script>
+
+    <!-- Link jQuery JavaScript library in order to use the $ (jQuery) method-->
+    <!-- <script src="common/jquery-2.0.3.min.js"></script>-->
+    <!-- and\or any other scripts you might need to operate the JSP file behind the scene once it arrives to the client-->
+</head>
+<body id="body">
+<script>
+    window.test1 = 4;
+</script>
+<div class="container">
+    <div id="headline">
+        <h1 id = "welcome">Welcome To Rizpa Stock Exchange System</h1>
+    </div>
+    <h2>To login please enter a unique user name:</h2>
+    <br>
+    <form id="loginForm" method="GET" action="/login">
+        <input type="text" name="username"  id ="username"class=""/>
+        <input type="submit" value="Login"/><br>
+        <div id ="userKindDiv">
+            <label style="-webkit-text-fill-color: #FFFFFF">User kind: </label>
+            <input type="radio" name="userKind"  id ="trader" value="Trader" checked="true" />
+        <label for="trader" style="-webkit-text-fill-color:#FFFFFF">Trader</label>
+        <input type="radio" name="userKind" id ="admin" value="Admin"/>
+        <label for="admin" style="-webkit-text-fill-color:#FFFFFF">Admin</label><br>
+        </div>
+    </form>
+    <div id="error-placeholder" class="alert-danger" role="alert"></div>
+</div>
+</body>
+</html>

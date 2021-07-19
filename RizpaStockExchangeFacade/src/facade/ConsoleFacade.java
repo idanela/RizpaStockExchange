@@ -32,14 +32,14 @@ public class  ConsoleFacade implements IFacade {
 
     @Override
     public List<TransactionMade> sellStocks(Transaction transaction) {
-        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingBuyTransactions(), m_Engine.getPendingSellTransactions());
+        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingBuyTransactions(), m_Engine.getPendingSellTransactions(),false);
         m_Engine.addTransactionsMade(transactionsMade);
         return transactionsMade;
     }
 
     @Override
     public List<TransactionMade> buyStocks(Transaction transaction) {
-        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingSellTransactions(), m_Engine.getPendingBuyTransactions());
+        List<TransactionMade> transactionsMade = transaction.findCounterTransaction(m_Engine.getPendingSellTransactions(), m_Engine.getPendingBuyTransactions(),true);
         m_Engine.addTransactionsMade(transactionsMade);
         return transactionsMade;
     }

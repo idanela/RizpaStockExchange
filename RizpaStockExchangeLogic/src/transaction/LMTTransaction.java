@@ -15,6 +15,11 @@ public abstract class LMTTransaction extends AllTransactionsKinds
     }
 
     @Override
+    public User getPartner() {
+        return null;
+    }
+
+    @Override
     protected abstract List<Transaction> sortAndFilterTransaction(List<Transaction> transactionsToScan, Stock m_Stock);
 
     @Override
@@ -23,6 +28,11 @@ public abstract class LMTTransaction extends AllTransactionsKinds
     @Override
     public String getTransactionKind() {
         return "LMT";
+    }
+
+    @Override
+    public User getBuyer() {
+        return null;
     }
 }
 
